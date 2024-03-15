@@ -1,6 +1,6 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils;
 
-public class Ability {
+public abstract class Ability {
     private String name;
     private int spiritualityUse;
     private int sequenceBoost = 1;
@@ -19,6 +19,8 @@ public class Ability {
         setSequenceBoost(sequenceBoost);
         this.sequence = sequence;
     }
+
+    public abstract void onAbilityUse();
 
     public void setName(String name) {
         this.name = name;
