@@ -8,6 +8,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
+import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
 
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
@@ -21,12 +22,15 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key key) {
-        if (KeyBinding.ABILITY_MENU_KEY.isDown()) {
-            KeyBinding.ABILITY_MENU_KEY.consumeClick();
-            Minecraft minecraft = Minecraft.getInstance();
-            minecraft.player.displayClientMessage(Component.literal("HI"), true);
-        }
-        //todo machen das  die Abilitys und so dann gehen
+        if( Minecraft.getInstance().player.getPersistentData().contains("isBeyonder")) { //todo persistendData erstellen nach werde
 
+            if (KeyBinding.ABILITY_USE_KEY.isDown()) {
+                KeyBinding.ABILITY_MENU_KEY.consumeClick();
+                Minecraft minecraft = Minecraft.getInstance();
+                Beyonder.getSelectedAbility().onAbilityUse(Minecraft.getInstance().player);
+                minecraft.player.displayClientMessage(Component.literal("HI"), true);
+            }
+            //todo machen das  die Abilitys und so dann gehen
+        }
     }
 }

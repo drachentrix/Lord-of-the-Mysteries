@@ -1,5 +1,8 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+
 public abstract class Ability {
     private String name;
     private int spiritualityUse;
@@ -20,7 +23,7 @@ public abstract class Ability {
         this.sequence = sequence;
     }
 
-    public abstract void onAbilityUse();
+    public abstract void onAbilityUse(LivingEntity player);
 
     public void setName(String name) {
         this.name = name;
