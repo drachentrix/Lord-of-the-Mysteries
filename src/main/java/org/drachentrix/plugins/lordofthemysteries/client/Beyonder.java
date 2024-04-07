@@ -1,5 +1,7 @@
 package org.drachentrix.plugins.lordofthemysteries.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
 import java.util.ArrayList;
@@ -12,6 +14,13 @@ public class Beyonder{
     private static String pathway; //todo maybe mit enum oder feiner als string lösen
     private static double sanity = 100;
 
+
+    public static void reset(){
+        abilityList.clear();
+        selectedAbility = null;
+        sequence = 10;
+        pathway = null;
+    }
     public static List<Ability> getAbilityList() {
         return abilityList;
     }
@@ -28,27 +37,31 @@ public class Beyonder{
         selectedAbility = switchAbility;
     }
 
-    public double getSanity() {
+    public static double getSanity() {
         return sanity;
     }
 
-    public void setSanity(double newSanity) {
+    public static void setSanity(double newSanity) {
+        if (newSanity < 0){
+            sanity = 0;
+            return;
+        }
         sanity = newSanity;
     }
 
-    public int getSequence() {
+    public static int getSequence() {
         return sequence;
     }
 
-    public void setSequence(int updatedSequence) {
+    public static void setSequence(int updatedSequence) {
         sequence = updatedSequence;
     }
 
-    public String getPathway() {
+    public static String getPathway() {
         return pathway;
     }
 
-    public void setPathway(String newPathway) {
+    public static void setPathway(String newPathway) {
         pathway = newPathway;
     }
 }

@@ -1,8 +1,8 @@
-package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.DoorPathway.Sequence;
+package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Sequence;
 
 import net.minecraft.world.item.crafting.Ingredient;
-import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.DoorPathway.Ability.DoorOpening;
-import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.PotionForm;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.DoorOpening;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.PotionForm;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
 import java.util.ArrayList;
@@ -16,6 +16,6 @@ public class Apprentice extends PotionForm{
 
     private static final List<Ingredient> ingredientList = new ArrayList<>();//todo nach erstellen der Ingredients einfügen
     public Apprentice() {
-        super(ingredientList, "Apprentice", 9, abilityList);
+        super(ingredientList, "Apprentice", 9, abilityList, "Door", new Properties().stacksTo(1));
     }
 }

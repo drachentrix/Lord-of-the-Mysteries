@@ -18,6 +18,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
+import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
 import org.slf4j.Logger;
 
 @Mod(LordOfTheMysteries.MODID)
@@ -33,6 +35,9 @@ public class LordOfTheMysteries {
         CREATIVE_MODE_TABS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+
+        ItemRegister.register(modEventBus);
+        ItemCreativeTab.register(modEventBus);
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -43,7 +48,8 @@ public class LordOfTheMysteries {
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
-
+            event.accept(ItemRegister.APPRENTICE_POTION);
+            event.accept(ItemRegister.RESET);
         }
     }
 

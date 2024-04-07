@@ -2,5 +2,8 @@
   "key.lordofthemysteries.ability": "Lord of the Mysteries ability",
   "key.lordofthemysteries.ability_use": "Use Ability",
   "key.lordofthemysteries.ability_cycle": "Cycle Ability's",
-  "key.lordofthemysteries.ability_menu": "Open Ability Menu"
+  "key.lordofthemysteries.ability_menu": "Open Ability Menu",
+
+  "item.lordofthemysteries.apprentice_potion": "Apprentice",
+  "item.lordofthemysteries.reset": "Become Human again"
 }
