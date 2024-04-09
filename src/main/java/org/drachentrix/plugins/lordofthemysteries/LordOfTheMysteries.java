@@ -18,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class LordOfTheMysteries {
         modEventBus.addListener(this::commonSetup);
         CREATIVE_MODE_TABS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new ClientEvents());
         modEventBus.addListener(this::addCreative);
 
         ItemRegister.register(modEventBus);

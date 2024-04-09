@@ -29,8 +29,8 @@ public class ClientEvents {
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
                 Minecraft minecraft = Minecraft.getInstance();
-                Beyonder.getSelectedAbility().onAbilityUse(Minecraft.getInstance().player);
-                minecraft.player.displayClientMessage(Component.literal("HI"), true);
+                Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
+                //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
             }
             //todo machen das  die Abilitys und so dann gehen
         }

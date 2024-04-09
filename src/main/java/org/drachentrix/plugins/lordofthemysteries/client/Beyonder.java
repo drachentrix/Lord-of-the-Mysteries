@@ -30,7 +30,7 @@ public class Beyonder{
     }
 
     public static Ability getSelectedAbility() {
-        return selectedAbility;
+        return selectedAbility == null ? abilityList.get(0) : selectedAbility;
     }
 
     public static void setSelectedAbility(Ability switchAbility) {
