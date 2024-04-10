@@ -9,8 +9,9 @@ import net.minecraft.world.level.block.Blocks;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
 public class DoorOpening extends Ability{
-    public DoorOpening() {
-        super("Door Opening", 100, 9);
+
+    public DoorOpening(int spiritualityUse, int sequence) {
+        super("Door Opening", spiritualityUse, sequence);
     }
 
     @Override
@@ -22,19 +23,18 @@ public class DoorOpening extends Ability{
         Level world = player.getCommandSenderWorld();
 
 
-        if (world.getBlockState(new BlockPos(playerX+1, playerY+2, playerZ)).getBlock() == Blocks.AIR){
+        if (world.getBlockState(new BlockPos(playerX+1, playerY+1, playerZ)).getBlock() == Blocks.AIR){
             Minecraft.getInstance().player.displayClientMessage(Component.literal("There is no wall to phase through"), true);
             return;
 
         }
         for (int i = 2; i <= 6; i++) {
-            if (world.getBlockState(new BlockPos(playerX+i, playerY+2, playerZ)).getBlock() == Blocks.AIR){
-                player.setPos(playerX+i, playerY, playerZ);
-                break;
+            if (world.getBlockState(new BlockPos(playerX+i, playerY+1, playerZ)).getBlock() == Blocks.AIR){
+                player.setPos(playerX+i+1, playerY, playerZ);
+                return;
             }
         }
-        //if (player.getBlockX() == playerX && player.getBlockY() == playerY && player.getBlockZ() == playerZ){
-           // Minecraft.getInstance().player.displayClientMessage(Component.literal("The wall seems to be to thick"), true);
-        //}
+        Minecraft.getInstance().player.displayClientMessage(Component.literal("The wall seems to be to thick"), true);
+
     }
 }

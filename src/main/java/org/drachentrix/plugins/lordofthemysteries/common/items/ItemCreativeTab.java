@@ -19,6 +19,7 @@ public class ItemCreativeTab {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ItemRegister.APPRENTICE_POTION.get());
                         output.accept(ItemRegister.RESET.get());
+                        output.accept(ItemRegister.TRICKMASTER_POTION.get());
                     } )
                     .build());
 

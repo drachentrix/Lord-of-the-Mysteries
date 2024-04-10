@@ -51,6 +51,7 @@ public class LordOfTheMysteries {
     {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
             event.accept(ItemRegister.APPRENTICE_POTION);
+            event.accept(ItemRegister.TRICKMASTER_POTION);
             event.accept(ItemRegister.RESET);
         }
     }

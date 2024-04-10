@@ -36,6 +36,12 @@ public class PotionForm extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if (!level.isClientSide) {
             if (Beyonder.getPathway() == null) {
+                if (sequence !=9){
+                    player.displayClientMessage(
+                            Component.literal("You feel the Madness devouring you.\n You shouldn't have done that!"), true);
+                    Beyonder.setSanity(new Random().nextInt(0, 6));
+                    return super.use(level, player, interactionHand);
+                }
                 Beyonder.setPathway(pathway);
                 Beyonder.setSequence(sequence);
                 abilityList.forEach(Beyonder::addAbility);
@@ -46,9 +52,10 @@ public class PotionForm extends Item {
                             Component.literal("You feel the Madness devouring you.\n You shouldn't have done that!"), true);
                     Beyonder.setSanity(new Random().nextInt(0, 6));
                 } else {
-                    if (sequence > Beyonder.getSequence()) {
-                        if (sequence - 1 == Beyonder.getSequence()) {
+                    if (sequence < Beyonder.getSequence()) {
+                        if (sequence + 1 == Beyonder.getSequence()) {
                             Beyonder.setSequence(sequence);
+                            player.displayClientMessage(Component.literal("You successfully became a sequence " + sequence + " Beyonder of the Pathway " + pathway), true);
                         } else {
                             if (new Random().nextInt(0, 101) < 5) {
                                 player.displayClientMessage(

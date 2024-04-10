@@ -2,6 +2,7 @@ package org.drachentrix.plugins.lordofthemysteries.common.utils;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 
 public abstract class Ability {
     private String name;
@@ -11,15 +12,7 @@ public abstract class Ability {
 
     public Ability(String name, int spiritualityUse, int sequence) {
         setName(name);
-        setSpiritualityUse(spiritualityUse);
-        this.sequence = sequence;
-    }
-
-
-    public Ability(String name, int spiritualityUse, int sequenceBoost, int sequence) {
-        setName(name);
-        setSpiritualityUse(spiritualityUse);
-        setSequenceBoost(sequenceBoost);
+        setSpiritualityUse(spiritualityUse - spiritualityUse % (10 - Beyonder.getSequence()));
         this.sequence = sequence;
     }
 
