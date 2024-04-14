@@ -31,8 +31,12 @@ public class ClientEvents {
                 Minecraft minecraft = Minecraft.getInstance();
                 Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
                 //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
+            } else if (KeyBinding.ABILITY_CICLE_KEY.isDown()) {
+                KeyBinding.ABILITY_CICLE_KEY.consumeClick();
+                int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility())+1;
+                Beyonder.setSelectedAbility(Beyonder.getAbilityList().get(nextAbilityIndex < Beyonder.getAbilityList().size() ? nextAbilityIndex : 0));
+                Minecraft.getInstance().player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
             }
-            //todo machen das  die Abilitys und so dann gehen
         }
     }
 }

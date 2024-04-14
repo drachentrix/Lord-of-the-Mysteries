@@ -5,6 +5,8 @@
 - [ ] Add that with every sequence you get a book with ability infos and changes
 - [ ] high sequence beyonders(around Sequence 2) can influence the notes in the book
 - [ ] Add system, that with less Sanity more problems occur
+- [ ] Freezetarget on whole body, instead of only upper parts
+- [ ] anti divination setup 
 - [ ] Make that switching to neighbouring pathway is possible
 - [ ] Add system, that with less Sanity more problems occur
 - [ ] implement Multiplayer compatibility 

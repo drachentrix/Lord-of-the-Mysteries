@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public class PotionForm extends Item {
     private final List<Ingredient> ingredients;
     private final String name;
     private final int sequence;
-    private final List<Ability> abilityList;
+    private final List<Ability> abilityList = new ArrayList<>();
     private final String pathway;
 
     public PotionForm(List<Ingredient> ingredients, String name, int sequence, List<Ability> abilityList, String pathway, Properties properties) {
@@ -28,7 +29,7 @@ public class PotionForm extends Item {
         this.ingredients = ingredients;
         this.name = name;
         this.sequence = sequence;
-        this.abilityList = abilityList;
+        this.abilityList.addAll(abilityList);
         this.pathway = pathway;
     }
 
@@ -55,6 +56,7 @@ public class PotionForm extends Item {
                     if (sequence < Beyonder.getSequence()) {
                         if (sequence + 1 == Beyonder.getSequence()) {
                             Beyonder.setSequence(sequence);
+                            abilityList.forEach(Beyonder::addAbility);
                             player.displayClientMessage(Component.literal("You successfully became a sequence " + sequence + " Beyonder of the Pathway " + pathway), true);
                         } else {
                             if (new Random().nextInt(0, 101) < 5) {
