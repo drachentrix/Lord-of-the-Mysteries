@@ -1,12 +1,15 @@
 package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -30,33 +33,30 @@ public class FlashTarget extends Ability {
 
         boolean foundBlockOrEntity = false;
         BlockPos targetBlock = null;
-        Entity targetEntity = null;
 
         for(double distance = 0; distance < reachDistance; distance += increment) {
             Vec3 rayEnd = playerPos.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
-            HitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-            if (result.getType() == HitResult.Type.BLOCK){
-                targetBlock = ((BlockHitResult)result).getBlockPos();
-                break;
-            } else if(result.getType() == HitResult.Type.ENTITY){
-                foundBlockOrEntity = true;
-                targetEntity = ((EntityHitResult)result).getEntity();
+            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+            if (result.getType() == HitResult.Type.BLOCK || result.getType() == HitResult.Type.ENTITY ){
+                targetBlock = result.getBlockPos();
                 break;
             }
         }
 
         if(!foundBlockOrEntity) {
             Vec3 rayEnd = playerPos.add(lookVector.x  * reachDistance, lookVector.y  * reachDistance, lookVector.z  * reachDistance);
-            HitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
             if (result.getType() == HitResult.Type.BLOCK){
-                targetBlock = ((BlockHitResult)result).getBlockPos();
+                targetBlock = result.getBlockPos();
             }
         }
-        if (targetBlock != null || targetEntity != null) {
-            LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.getCommandSenderWorld());
-            lightningBolt.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
-            player.getCommandSenderWorld().addFreshEntity(lightningBolt);
-            return;
+        if (targetBlock != null) {
+            for (int i = 0; i < 10; i++) {
+                LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.getCommandSenderWorld());
+                lightningBolt.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
+
+                player.getCommandSenderWorld().addFreshEntity(lightningBolt);
+            }
         }
 
     }

@@ -8,7 +8,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.phys.Vec3;
 
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
-import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class FreezeTarget extends Ability {
 
     @Override
     public void onAbilityUse(LivingEntity player) {
-        Minecraft.getInstance().player.displayClientMessage(Component.literal("WELP"), true);
         Vec3 lookVec = player.getLookAngle();
         double rayLength = 35.0;
         Vec3 rayEnd = player.getEyePosition(1.5f).add(lookVec.x * rayLength, lookVec.y * rayLength, lookVec.z * rayLength);
@@ -31,9 +29,16 @@ public class FreezeTarget extends Ability {
                 double dotProduct = lookVec.dot(playerToEntity);
 
                 if (dotProduct > 0.97) {
-                    Minecraft.getInstance().player.displayClientMessage(Component.literal("Player is looking at entity"), true);
+                    Float speed = ((LivingEntity) entity).getSpeed();
+                    ((LivingEntity) entity).setSpeed(0);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ((LivingEntity) entity).setSpeed(speed);
                 }
             }
         }
-    }
+    }s
 }
