@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.phys.BlockHitResult;
@@ -54,8 +55,9 @@ public class FlashTarget extends Ability {
             for (int i = 0; i < 10; i++) {
                 LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.getCommandSenderWorld());
                 lightningBolt.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
-
-                player.getCommandSenderWorld().addFreshEntity(lightningBolt);
+                Zombie zombie = new Zombie(EntityType.ZOMBIE, player.getCommandSenderWorld());
+                zombie.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
+                player.getCommandSenderWorld().addFreshEntity(zombie);
             }
         }
 

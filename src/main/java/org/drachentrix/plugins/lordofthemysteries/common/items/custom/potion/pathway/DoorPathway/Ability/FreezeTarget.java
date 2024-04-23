@@ -40,5 +40,5 @@ public class FreezeTarget extends Ability {
                 }
             }
         }
-    }s
+    }
 }

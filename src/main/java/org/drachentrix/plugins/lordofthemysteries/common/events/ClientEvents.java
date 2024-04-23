@@ -33,15 +33,19 @@ public class ClientEvents {
         event.register(KeyBinding.ABILITY_CICLE_KEY);
         event.register(KeyBinding.ABILITY_MENU_KEY);
         event.register(KeyBinding.ABILITY_USE_KEY);
+        event.register(KeyBinding.ABILIY_SWITCH_DIMENSION);
     }
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key key) {
         if(Beyonder.getPathway() != null) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (KeyBinding.ABILIY_SWITCH_DIMENSION.isDown()) {
+                KeyBinding.ABILIY_SWITCH_DIMENSION.consumeClick();
 
+            }
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
-                Minecraft minecraft = Minecraft.getInstance();
                 Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
                 //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
             } else if (KeyBinding.ABILITY_CICLE_KEY.isDown()) {
