@@ -21,6 +21,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 import org.slf4j.Logger;
 
 @Mod(LordOfTheMysteries.MODID)
@@ -40,6 +41,7 @@ public class LordOfTheMysteries {
 
         ItemRegister.register(modEventBus);
         ItemCreativeTab.register(modEventBus);
+        SpiritWorld.register();
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }

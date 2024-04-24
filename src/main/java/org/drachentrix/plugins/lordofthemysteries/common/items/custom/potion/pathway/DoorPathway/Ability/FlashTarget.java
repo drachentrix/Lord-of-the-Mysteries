@@ -55,9 +55,7 @@ public class FlashTarget extends Ability {
             for (int i = 0; i < 10; i++) {
                 LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.getCommandSenderWorld());
                 lightningBolt.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
-                Zombie zombie = new Zombie(EntityType.ZOMBIE, player.getCommandSenderWorld());
-                zombie.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
-                player.getCommandSenderWorld().addFreshEntity(zombie);
+                player.getCommandSenderWorld().addFreshEntity(lightningBolt);
             }
         }
 

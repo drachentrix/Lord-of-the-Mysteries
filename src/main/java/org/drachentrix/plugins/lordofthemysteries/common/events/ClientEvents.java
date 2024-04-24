@@ -1,8 +1,14 @@
 package org.drachentrix.plugins.lordofthemysteries.common.events;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -13,12 +19,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
@@ -38,11 +47,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key key) {
-        if(Beyonder.getPathway() != null) {
+        if (Beyonder.getPathway() != null) {
             Minecraft minecraft = Minecraft.getInstance();
             if (KeyBinding.ABILIY_SWITCH_DIMENSION.isDown()) {
                 KeyBinding.ABILIY_SWITCH_DIMENSION.consumeClick();
-
+                ServerLevel level = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+                minecraft.player.changeDimension(level);
             }
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
@@ -50,7 +60,7 @@ public class ClientEvents {
                 //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
             } else if (KeyBinding.ABILITY_CICLE_KEY.isDown()) {
                 KeyBinding.ABILITY_CICLE_KEY.consumeClick();
-                int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility())+1;
+                int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility()) + 1;
                 Beyonder.setSelectedAbility(Beyonder.getAbilityList().get(nextAbilityIndex < Beyonder.getAbilityList().size() ? nextAbilityIndex : 0));
                 Minecraft.getInstance().player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
             }
@@ -59,19 +69,22 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (event.getTo().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)){
+        if (event.getTo().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
             LivingEntity player = event.getEntity();
             Level world = player.getCommandSenderWorld();
-            Level spiritWorld =  player.getServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+            MinecraftServer server = player.getServer();
+            if (server != null) {
+                Level spiritWorld = player.getServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
 
-            BlockPos playerPos = player.getOnPos();
-            playerPosition = new Vec3(playerPos.getX(), playerPos.getY(), playerPos.getZ());
-            for (int x = -25; x < 25; x++) {
-                for (int z = -25; z < 25; z++) {
-                    for (int y = playerPos.getY()- 4; y < world.getHeight(); y++) {
-                        BlockPos realPos = new BlockPos(playerPos.getX() + x,  y, playerPos.getZ() + z);
-                        BlockState state = world.getBlockState(realPos);
-                        spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                BlockPos playerPos = player.getOnPos();
+                playerPosition = new Vec3(playerPos.getX(), playerPos.getY(), playerPos.getZ());
+                for (int x = -25; x < 25; x++) {
+                    for (int z = -25; z < 25; z++) {
+                        for (int y = playerPos.getY() - 4; y < world.getHeight(); y++) {
+                            BlockPos realPos = new BlockPos(playerPos.getX() + x, y, playerPos.getZ() + z);
+                            BlockState state = world.getBlockState(realPos);
+                            spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                        }
                     }
                 }
             }
@@ -80,21 +93,24 @@ public class ClientEvents {
 
 
     @SubscribeEvent
-    public void onPlayerMoveEvent(MovementInputUpdateEvent moveEvent){
+    public void onPlayerMoveEvent(MovementInputUpdateEvent moveEvent) {
         if (moveEvent.getEntity() instanceof Player) {
-            Player player = (Player) moveEvent.getEntity();
+            Player player = moveEvent.getEntity();
             Level world = player.getCommandSenderWorld();
-            Level spiritWorld =  player.getServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+            MinecraftServer server = player.getServer();
+            if (server != null) {
+                Level spiritWorld = player.getServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
 
-            if(world.equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)){
-                double xDiff = playerPosition.x - player.getX();
-                double zDiff = playerPosition.z - player.getZ();
-                for (int x = 0; x < xDiff; x++) {
-                    for (int z = 0; z < zDiff; z++) {
-                        for (int y = (int) playerPosition.y; y < world.getHeight(); y++) {
-                            BlockPos realPos = new BlockPos((int) (playerPosition.x + x),  y, (int) (playerPosition.z + z));
-                            BlockState state = world.getBlockState(realPos);
-                            spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                if (world.equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
+                    double xDiff = playerPosition.x - player.getX();
+                    double zDiff = playerPosition.z - player.getZ();
+                    for (int x = 0; x < xDiff; x++) {
+                        for (int z = 0; z < zDiff; z++) {
+                            for (int y = (int) playerPosition.y; y < world.getHeight(); y++) {
+                                BlockPos realPos = new BlockPos((int) (playerPosition.x + x), y, (int) (playerPosition.z + z));
+                                BlockState state = world.getBlockState(realPos);
+                                spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                            }
                         }
                     }
                 }
