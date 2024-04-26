@@ -1,33 +1,25 @@
 package org.drachentrix.plugins.lordofthemysteries.common.events;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.worldgen.DimensionTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
@@ -51,7 +43,7 @@ public class ClientEvents {
             Minecraft minecraft = Minecraft.getInstance();
             if (KeyBinding.ABILIY_SWITCH_DIMENSION.isDown()) {
                 KeyBinding.ABILIY_SWITCH_DIMENSION.consumeClick();
-                ServerLevel level = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+                ServerLevel level = Level.OVERWORLD == Minecraft.getInstance().player.clientLevel.dimension() ? Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY): Minecraft.getInstance().getSingleplayerServer().getLevel(Level.OVERWORLD);
                 minecraft.player.changeDimension(level);
             }
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {

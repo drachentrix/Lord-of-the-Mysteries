@@ -1,5 +1,5 @@
 {
-  "type": "lordofthemysteries:spirit_world",
+  "type": "lordofthemysteries:spirit_world_type",
   "generator": {
     "type": "minecraft:noise",
     "settings": "minecraft:overworld",

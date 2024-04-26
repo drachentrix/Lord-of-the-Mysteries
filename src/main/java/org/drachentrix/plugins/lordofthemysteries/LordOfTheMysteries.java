@@ -38,10 +38,10 @@ public class LordOfTheMysteries {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         modEventBus.addListener(this::addCreative);
-
+        SpiritWorld.register();
         ItemRegister.register(modEventBus);
         ItemCreativeTab.register(modEventBus);
-        SpiritWorld.register();
+
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -49,9 +49,8 @@ public class LordOfTheMysteries {
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ItemRegister.APPRENTICE_POTION);
             event.accept(ItemRegister.TRICKMASTER_POTION);
             event.accept(ItemRegister.RESET);
@@ -61,12 +60,12 @@ public class LordOfTheMysteries {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
     }
+
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event) {
         }
     }
 }
