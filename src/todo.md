@@ -8,6 +8,5 @@
 - [ ] high sequence beyonders(around Sequence 2) can influence the notes in the book
 - [ ] Add system, that with less Sanity more problems occur
 - [ ] Freezetarget on whole body, instead of only upper parts
-- [ ] anti divination setup 
 - [ ] Make that switching to neighbouring pathway is possible
 - [ ] implement Multiplayer compatibility 

@@ -26,5 +26,5 @@ public class KeyBinding {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, KEY_CATEGORY_ABILITY );
 
     public static final KeyMapping ABILIY_SWITCH_DIMENSION = new KeyMapping(KEY_SWITCH_DIMENSION, KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, KEY_CATEGORY_ABILITY );
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KEY_CATEGORY_ABILITY );
 }
