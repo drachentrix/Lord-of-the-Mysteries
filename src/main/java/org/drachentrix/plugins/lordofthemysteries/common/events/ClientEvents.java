@@ -109,6 +109,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onPlayerMoveEvent(LivingEvent.LivingTickEvent moveEvent) {
+        //todo mach n tick und alle 3 sek oder so checken ob distanz grosss genung is
         if (moveEvent.getEntity() instanceof Player player && playerPosition != null) {
             if ( Math.abs(player.distanceToSqr(playerPosition.getX(), playerPosition.getY(), playerPosition.getZ())) >25) {
                 Level world = Minecraft.getInstance().getSingleplayerServer().getLevel(Level.OVERWORLD);
