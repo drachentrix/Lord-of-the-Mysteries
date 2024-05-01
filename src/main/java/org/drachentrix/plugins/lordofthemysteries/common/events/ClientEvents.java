@@ -22,6 +22,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,7 +36,7 @@ import java.awt.*;
 
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
-    private static Vec3 playerPosition;
+    private static BlockPos playerPosition;
 
     @SubscribeEvent
     public static void registerKey(RegisterKeyMappingsEvent event) {
@@ -59,6 +60,7 @@ public class ClientEvents {
                 } else {
                     player.changeDimension(level, new DimTeleporter(minecraft.player.getOnPos(), true));
                 }
+                playerPosition = player.blockPosition();
                 KeyBinding.ABILIY_SWITCH_DIMENSION.consumeClick();
 
             }
@@ -83,18 +85,17 @@ public class ClientEvents {
     public static void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getTo().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
             LivingEntity player = event.getEntity();
-            Level overworld = player.getCommandSenderWorld();
-            Level spiritWorld = player.getServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+            Level overworld = player.getServer().getLevel(event.getFrom());
+            Level spiritWorld = player.getServer().getLevel(event.getTo());
 
             if (spiritWorld != null) {
                 BlockPos playerPos = player.blockPosition();
-                Vec3 playerPosition = new Vec3(playerPos.getX(), playerPos.getY(), playerPos.getZ());
 
-                int radius = 5; // Radius to copy blocks around the player
+                int radius = 10; // Radius to copy blocks around the player
 
                 for (int x = -radius; x <= radius; x++) {
                     for (int z = -radius; z <= radius; z++) {
-                        for (int y = playerPos.getY() - 4; y <= playerPos.getY() + 4; y++) {
+                        for (int y = playerPos.getY() - radius; y <= playerPos.getY() + radius; y++) {
                             BlockPos realPos = new BlockPos(playerPos.getX() + x, y, playerPos.getZ() + z);
                             BlockState state = overworld.getBlockState(realPos);
                             spiritWorld.setBlock(realPos, state, 2); // Copy block state to Spirit World
@@ -107,29 +108,38 @@ public class ClientEvents {
 
 
     @SubscribeEvent
-    public void onPlayerMoveEvent(MovementInputUpdateEvent moveEvent) {
-        if (moveEvent.getEntity() instanceof Player) {
-            Player player = moveEvent.getEntity();
-            Level world = player.getCommandSenderWorld();
-            IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
-            if (server != null) {
-                Level spiritWorld = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+    public void onPlayerMoveEvent(LivingEvent.LivingTickEvent moveEvent) {
+        if (moveEvent.getEntity() instanceof Player player && playerPosition != null) {
+            if ( Math.abs(player.distanceToSqr(playerPosition.getX(), playerPosition.getY(), playerPosition.getZ())) >25) {
+                Level world = Minecraft.getInstance().getSingleplayerServer().getLevel(Level.OVERWORLD);
+                IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
+                if (server != null) {
+                    Level spiritWorld = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
+                    if (player.level().dimension().equals(spiritWorld.dimension())) {
+                        int xDiff = (int) Math.abs(playerPosition.getX() - player.getX());
+                        int  zDiff = (int) Math.abs(playerPosition.getZ() - player.getZ());
+                        int  yDiff = (int) Math.abs(playerPosition.getY() - player.getY());
 
-                if (world.equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
-                    double xDiff = playerPosition.x - player.getX();
-                    double zDiff = playerPosition.z - player.getZ();
-                    for (int x = 0; x < xDiff; x++) {
-                        for (int z = 0; z < zDiff; z++) {
-                            for (int y = (int) playerPosition.y; y < world.getHeight(); y++) {
-                                BlockPos realPos = new BlockPos((int) (playerPosition.x + x), y, (int) (playerPosition.z + z));
-                                BlockState state = world.getBlockState(realPos);
-                                spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                        for (int x = -xDiff; x < xDiff; x++) {
+                            for (int z = -zDiff; z < zDiff; z++) {
+                                for (int y = -yDiff; y < yDiff; y++) {
+                                    BlockPos realPos = new BlockPos((playerPosition.getX() + x), y, (playerPosition.getZ() + z));
+                                    BlockState state = world.getBlockState(realPos);
+                                    spiritWorld.setBlock(realPos, state, 2);//maybe anders
+                                }
                             }
+
                         }
                     }
                 }
+                playerPosition = player.blockPosition();
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        playerPosition = event.getEntity().blockPosition();
     }
 }
