@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
@@ -36,7 +37,7 @@ import java.awt.*;
 
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
-    private static BlockPos playerPosition;
+    public static BlockPos playerPosition;
 
     @SubscribeEvent
     public static void registerKey(RegisterKeyMappingsEvent event) {
@@ -102,45 +103,26 @@ public class ClientEvents {
                         }
                     }
                 }
+                playerPosition = playerPos;
             }
         }
     }
 
 
-    @SubscribeEvent
-    public void onPlayerMoveEvent(LivingEvent.LivingTickEvent moveEvent) {
-        //todo mach n tick und alle 3 sek oder so checken ob distanz grosss genung is
-        if (moveEvent.getEntity() instanceof Player player && playerPosition != null) {
-            if ( Math.abs(player.distanceToSqr(playerPosition.getX(), playerPosition.getY(), playerPosition.getZ())) >25) {
-                Level world = Minecraft.getInstance().getSingleplayerServer().getLevel(Level.OVERWORLD);
-                IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
-                if (server != null) {
-                    Level spiritWorld = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
-                    if (player.level().dimension().equals(spiritWorld.dimension())) {
-                        int xDiff = (int) Math.abs(playerPosition.getX() - player.getX());
-                        int  zDiff = (int) Math.abs(playerPosition.getZ() - player.getZ());
-                        int  yDiff = (int) Math.abs(playerPosition.getY() - player.getY());
 
-                        for (int x = -xDiff; x < xDiff; x++) {
-                            for (int z = -zDiff; z < zDiff; z++) {
-                                for (int y = -yDiff; y < yDiff; y++) {
-                                    BlockPos realPos = new BlockPos((playerPosition.getX() + x), y, (playerPosition.getZ() + z));
-                                    BlockState state = world.getBlockState(realPos);
-                                    spiritWorld.setBlock(realPos, state, 2);//maybe anders
-                                }
-                            }
-
-                        }
-                    }
-                }
-                playerPosition = player.blockPosition();
-            }
-        }
-
-    }
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        playerPosition = event.getEntity().blockPosition();
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            if (serverPlayer.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
+                playerPosition = event.getEntity().blockPosition();
+                ServerLevel overworldLevel = serverPlayer.getServer().getLevel(Level.OVERWORLD);
+                if (overworldLevel != null) {
+                    serverPlayer.getServer().execute(() -> {
+                        serverPlayer.changeDimension(overworldLevel, new DimTeleporter(serverPlayer.getOnPos(), false));
+                    });
+                }
+            }
+        }
     }
 }
