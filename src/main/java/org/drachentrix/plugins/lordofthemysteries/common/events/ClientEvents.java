@@ -2,6 +2,7 @@ package org.drachentrix.plugins.lordofthemysteries.common.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.providers.UnihexProvider;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -38,6 +39,7 @@ import java.awt.*;
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
     public static BlockPos playerPosition;
+    public static int renderDistance;
 
     @SubscribeEvent
     public static void registerKey(RegisterKeyMappingsEvent event) {
@@ -56,9 +58,11 @@ public class ClientEvents {
                 ResourceKey<Level> destDim = Level.OVERWORLD == player.level().dimension() ? SpiritWorld.SPIRIT_WORLD_LEVEL_KEY : Level.OVERWORLD;
                 ServerLevel level = Minecraft.getInstance().getSingleplayerServer().getLevel(destDim);
                 if (destDim != Level.OVERWORLD) {
-
+                    renderDistance = player.requestedViewDistance();
+                    Minecraft.getInstance().options.renderDistance().set(1);
                     player.changeDimension(level, new DimTeleporter(minecraft.player.getOnPos(), false));
                 } else {
+                    Minecraft.getInstance().options.renderDistance().set(renderDistance);
                     player.changeDimension(level, new DimTeleporter(minecraft.player.getOnPos(), true));
                 }
                 playerPosition = player.blockPosition();
