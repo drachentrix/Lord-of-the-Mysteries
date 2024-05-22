@@ -40,10 +40,11 @@ public class PlayerMoveOnTicks {
                     int zDiff = (int) Math.abs(ClientEvents.playerPosition.getZ() - player.getZ());
                     int yDiff = (int) Math.abs(ClientEvents.playerPosition.getY() - player.getY());
                     if (xDiff > 1 || zDiff > 1 || yDiff > 1) {
-                        for (int x = -xDiff - 2; x < xDiff + 2; x++) {
-                            for (int z = -zDiff - 2; z < zDiff + 2; z++) {
-                                for (int y = -yDiff - 2; y < yDiff + 2; y++) {
-                                    BlockPos realPos = new BlockPos((ClientEvents.playerPosition.getX() + x), y, (ClientEvents.playerPosition.getZ() + z));
+                        for (int x = -xDiff - 7; x < xDiff + 7; x++) {
+                            for (int z = -zDiff - 7; z < zDiff + 7; z++) {
+                                for (int y = -yDiff - 2; y < yDiff + 7; y++) {
+                                    //todo blockstate in setblock null, warum er das nicht macht, checken später
+                                    BlockPos realPos = new BlockPos((ClientEvents.playerPosition.getX() + x), ClientEvents.playerPosition.getY() + y, (ClientEvents.playerPosition.getZ() + z));
                                     BlockState state = world.getBlockState(realPos);
                                     spiritWorld.setBlock(realPos, state, 1);
                                 }

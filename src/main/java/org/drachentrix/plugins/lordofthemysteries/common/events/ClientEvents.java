@@ -59,7 +59,7 @@ public class ClientEvents {
                 ServerLevel level = Minecraft.getInstance().getSingleplayerServer().getLevel(destDim);
                 if (destDim != Level.OVERWORLD) {
                     renderDistance = player.requestedViewDistance();
-                    Minecraft.getInstance().options.renderDistance().set(1);
+                    Minecraft.getInstance().options.renderDistance().set(2);
                     player.changeDimension(level, new DimTeleporter(minecraft.player.getOnPos(), false));
                 } else {
                     Minecraft.getInstance().options.renderDistance().set(renderDistance);
