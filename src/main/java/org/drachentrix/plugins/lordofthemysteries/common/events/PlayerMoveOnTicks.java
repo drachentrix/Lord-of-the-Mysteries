@@ -19,14 +19,28 @@ public class PlayerMoveOnTicks {
             tickCounter++;
 
             // Check every 1 seconds (20 ticks per second in Minecraft)
-            if (tickCounter >= 2 * 20) {
+            if (tickCounter >= 1 * 20) {
                 tickCounter = 0;
 
                 checkPlayerMove(Minecraft.getInstance().player);
             }
         }
     }
-  //maybe try mit render Event
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        //das ist possible, aber maybe schauen, wo das lowest level ist um das umzustellen und dann preventen
+        if (event.phase == TickEvent.Phase.END) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.level.dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY) && minecraft.player != null) {
+                int currentRenderDistance = minecraft.options.renderDistance().get();
+
+                if (currentRenderDistance != 2) {
+                    Minecraft.getInstance().options.renderDistance().set(2);
+                }
+            }
+        }
+    }
+
     public void checkPlayerMove(Player player) {
         if (ClientEvents.playerPosition != null) {
 
@@ -40,13 +54,12 @@ public class PlayerMoveOnTicks {
                     int zDiff = (int) Math.abs(ClientEvents.playerPosition.getZ() - player.getZ());
                     int yDiff = (int) Math.abs(ClientEvents.playerPosition.getY() - player.getY());
                     if (xDiff > 1 || zDiff > 1 || yDiff > 1) {
-                        for (int x = -xDiff - 7; x < xDiff + 7; x++) {
-                            for (int z = -zDiff - 7; z < zDiff + 7; z++) {
-                                for (int y = -yDiff - 2; y < yDiff + 7; y++) {
-                                    //todo blockstate in setblock null, warum er das nicht macht, checken später
+                        for (int x = -xDiff - 19; x < xDiff + 19; x++) {
+                            for (int z = -zDiff - 19; z < zDiff + 19; z++) {
+                                for (int y = -yDiff - 2; y < yDiff + 8; y++) {
                                     BlockPos realPos = new BlockPos((ClientEvents.playerPosition.getX() + x), ClientEvents.playerPosition.getY() + y, (ClientEvents.playerPosition.getZ() + z));
                                     BlockState state = world.getBlockState(realPos);
-                                    spiritWorld.setBlock(realPos, state, 1);
+                                    spiritWorld.setBlock(realPos, state, 2);
                                 }
                             }
 

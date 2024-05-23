@@ -1,31 +1,18 @@
 package org.drachentrix.plugins.lordofthemysteries.common.events;
 
+import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.font.providers.UnihexProvider;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
@@ -87,6 +74,16 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
+    public static void onFogDensityEvent(ViewportEvent.RenderFog event) {
+        if (Minecraft.getInstance().player.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
+            event.setFogShape(FogShape.SPHERE);
+            event.setFarPlaneDistance(14.0f);
+            event.setNearPlaneDistance(10.0f);
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
     public static void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getTo().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
             LivingEntity player = event.getEntity();
@@ -96,7 +93,7 @@ public class ClientEvents {
             if (spiritWorld != null) {
                 BlockPos playerPos = player.blockPosition();
 
-                int radius = 10; // Radius to copy blocks around the player
+                int radius = 20; // Radius to copy blocks around the player
 
                 for (int x = -radius; x <= radius; x++) {
                     for (int z = -radius; z <= radius; z++) {
@@ -113,8 +110,6 @@ public class ClientEvents {
     }
 
 
-
-
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
@@ -126,6 +121,15 @@ public class ClientEvents {
                         serverPlayer.changeDimension(overworldLevel, new DimTeleporter(serverPlayer.getOnPos(), false));
                     });
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            if (serverPlayer.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
+                Minecraft.getInstance().options.renderDistance().set(renderDistance);
             }
         }
     }
