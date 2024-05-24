@@ -56,7 +56,7 @@ public class PlayerMoveOnTicks {
                     if (xDiff > 1 || zDiff > 1 || yDiff > 1) {
                         for (int x = -xDiff - 19; x < xDiff + 19; x++) {
                             for (int z = -zDiff - 19; z < zDiff + 19; z++) {
-                                for (int y = -yDiff - 2; y < yDiff + 8; y++) {
+                                    for (int y = -yDiff - 5; y < yDiff + 8; y++) {
                                     BlockPos realPos = new BlockPos((ClientEvents.playerPosition.getX() + x), ClientEvents.playerPosition.getY() + y, (ClientEvents.playerPosition.getZ() + z));
                                     BlockState state = world.getBlockState(realPos);
                                     spiritWorld.setBlock(realPos, state, 2);

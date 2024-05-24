@@ -24,7 +24,9 @@ public class Beyonder{
     public static List<Ability> getAbilityList() {
         return abilityList;
     }
-
+    public static void loadAbilitys(){
+        throw new UnsupportedOperationException("Need to implement interface for abilitys to sequence");
+    }
     public static void addAbility(Ability ability) {
         abilityList.add(ability);
     }

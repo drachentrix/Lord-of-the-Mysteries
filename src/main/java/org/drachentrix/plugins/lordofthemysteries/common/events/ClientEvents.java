@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -77,8 +78,8 @@ public class ClientEvents {
     public static void onFogDensityEvent(ViewportEvent.RenderFog event) {
         if (Minecraft.getInstance().player.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
             event.setFogShape(FogShape.SPHERE);
-            event.setFarPlaneDistance(14.0f);
-            event.setNearPlaneDistance(10.0f);
+            event.setFarPlaneDistance(10.0f);
+            event.setNearPlaneDistance(7.0f);
             event.setCanceled(true);
         }
     }
@@ -97,7 +98,7 @@ public class ClientEvents {
 
                 for (int x = -radius; x <= radius; x++) {
                     for (int z = -radius; z <= radius; z++) {
-                        for (int y = playerPos.getY() - radius; y <= playerPos.getY() + radius; y++) {
+                        for (int y = playerPos.getY() - 5; y <= playerPos.getY() + 5; y++) {
                             BlockPos realPos = new BlockPos(playerPos.getX() + x, y, playerPos.getZ() + z);
                             BlockState state = overworld.getBlockState(realPos);
                             spiritWorld.setBlock(realPos, state, 2); // Copy block state to Spirit World
@@ -123,6 +124,10 @@ public class ClientEvents {
                 }
             }
         }
+        Player player = event.getEntity();
+        Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
+        Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
+        Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
     }
 
     @SubscribeEvent
@@ -131,6 +136,13 @@ public class ClientEvents {
             if (serverPlayer.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
                 Minecraft.getInstance().options.renderDistance().set(renderDistance);
             }
+        }
+
+        Player player = event.getEntity();
+        if (Beyonder.getPathway() != null){
+            player.getPersistentData().putString("Pathway", Beyonder.getPathway());
+            player.getPersistentData().putInt("Sequence", Beyonder.getSequence());
+            player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
         }
     }
 }
