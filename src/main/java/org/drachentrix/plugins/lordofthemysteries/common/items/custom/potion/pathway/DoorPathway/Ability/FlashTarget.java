@@ -2,6 +2,7 @@ package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pa
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,12 +18,27 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.checkerframework.checker.units.qual.C;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 
 
 public class FlashTarget extends Ability {
 
+    public FlashTarget(String name, int spiritualityUse, int sequence) {
+        super(name, spiritualityUse, sequence);
+        AbilityRegistry.registerAbility(name, this::fromNBT);
+
+    }
+
     public FlashTarget( int spiritualityUse, int sequence) {
-        super("Flash", spiritualityUse, sequence);
+        super("Flash Target", spiritualityUse, sequence);
+        AbilityRegistry.registerAbility("Flash Target", this::fromNBT);
+    }
+    @Override
+    public Ability fromNBT(CompoundTag nbt) {
+        String name = nbt.getString("name");
+        int sequence = nbt.getInt("sequence");
+        int spiriualityUse = nbt.getInt("spiritualityUse");
+        return new FlashTarget(name, spiriualityUse, sequence);
     }
 
     @Override

@@ -3,6 +3,8 @@ package org.drachentrix.plugins.lordofthemysteries.common.events;
 import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -18,11 +20,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
 import org.drachentrix.plugins.lordofthemysteries.common.world.DimTeleporter;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 
 import java.awt.*;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -42,9 +47,11 @@ public class ClientEvents {
         if (Beyonder.getPathway() != null) {
             Minecraft minecraft = Minecraft.getInstance();
             ServerPlayer player = minecraft.getSingleplayerServer().getPlayerList().getPlayerByName(minecraft.player.getGameProfile().getName());
+
             if (KeyBinding.ABILIY_SWITCH_DIMENSION.isDown()) {
                 ResourceKey<Level> destDim = Level.OVERWORLD == player.level().dimension() ? SpiritWorld.SPIRIT_WORLD_LEVEL_KEY : Level.OVERWORLD;
                 ServerLevel level = Minecraft.getInstance().getSingleplayerServer().getLevel(destDim);
+
                 if (destDim != Level.OVERWORLD) {
                     renderDistance = player.requestedViewDistance();
                     Minecraft.getInstance().options.renderDistance().set(2);
@@ -53,9 +60,9 @@ public class ClientEvents {
                     Minecraft.getInstance().options.renderDistance().set(renderDistance);
                     player.changeDimension(level, new DimTeleporter(minecraft.player.getOnPos(), true));
                 }
+
                 playerPosition = player.blockPosition();
                 KeyBinding.ABILIY_SWITCH_DIMENSION.consumeClick();
-
             }
 
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
@@ -70,6 +77,7 @@ public class ClientEvents {
                 int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility()) + 1;
                 Beyonder.setSelectedAbility(Beyonder.getAbilityList().get(nextAbilityIndex < Beyonder.getAbilityList().size() ? nextAbilityIndex : 0));
                 Minecraft.getInstance().player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal(Beyonder.getSelectedAbility().toString()));
             }
         }
     }
@@ -123,11 +131,17 @@ public class ClientEvents {
                     });
                 }
             }
+            serverPlayer.getServer().execute(() -> {
+                Player player = event.getEntity();
+                Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
+                Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
+                Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
+                Beyonder.loadAbilitys();
+                Beyonder.setSelectedAbility(AbilityRegistry.fromNBT((CompoundTag) player.getPersistentData().get("selectedAbility")));
+            });
         }
-        Player player = event.getEntity();
-        Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
-        Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
-        Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
+
+
     }
 
     @SubscribeEvent
@@ -136,13 +150,16 @@ public class ClientEvents {
             if (serverPlayer.level().dimension().equals(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY)) {
                 Minecraft.getInstance().options.renderDistance().set(renderDistance);
             }
-        }
-
-        Player player = event.getEntity();
-        if (Beyonder.getPathway() != null){
-            player.getPersistentData().putString("Pathway", Beyonder.getPathway());
-            player.getPersistentData().putInt("Sequence", Beyonder.getSequence());
-            player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
+            serverPlayer.getServer().execute(() -> {
+                Player player = event.getEntity();
+                if (Beyonder.getPathway() != null) {
+                    player.getPersistentData().putString("Pathway", Beyonder.getPathway());
+                    player.getPersistentData().putInt("Sequence", Beyonder.getSequence());
+                    player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
+                    CompoundTag tag = Beyonder.getSelectedAbility().toNBT();
+                    player.getPersistentData().put("selectedAbility", tag);
+                }
+            });
         }
     }
 }

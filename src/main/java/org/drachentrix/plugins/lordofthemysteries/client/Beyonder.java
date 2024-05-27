@@ -2,6 +2,7 @@ package org.drachentrix.plugins.lordofthemysteries.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.Sequences;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
 import java.util.ArrayList;
@@ -18,14 +19,21 @@ public class Beyonder{
     public static void reset(){
         abilityList.clear();
         selectedAbility = null;
-        sequence = 10;
+        sequence = -1;
         pathway = null;
     }
+
     public static List<Ability> getAbilityList() {
         return abilityList;
     }
     public static void loadAbilitys(){
-        throw new UnsupportedOperationException("Need to implement interface for abilitys to sequence");
+        if (abilityList.isEmpty()) {
+            for (int i = 9; i >= sequence; i--) {
+                int finalI = i;
+                Sequences.getAllSequences().stream().filter(sequences -> sequences.getPathway().equals(getPathway()))
+                        .filter(sequences -> sequences.getSequence() == finalI).forEach(abilityList1 -> abilityList1.getAbilityList().forEach(Beyonder::addAbility));
+            }
+        }
     }
     public static void addAbility(Ability ability) {
         abilityList.add(ability);
