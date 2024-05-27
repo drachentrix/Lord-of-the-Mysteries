@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.Scheduler;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 
 public class PlayerMoveOnTicks {
@@ -16,6 +17,7 @@ public class PlayerMoveOnTicks {
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
+            Scheduler.tick();
             tickCounter++;
 
             // Check every 1 seconds (20 ticks per second in Minecraft)

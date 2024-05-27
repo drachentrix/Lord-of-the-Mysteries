@@ -22,6 +22,7 @@ import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.events.PlayerMoveOnTicks;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.Scheduler;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 import org.slf4j.Logger;
 

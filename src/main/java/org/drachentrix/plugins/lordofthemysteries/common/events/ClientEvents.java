@@ -77,7 +77,6 @@ public class ClientEvents {
                 int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility()) + 1;
                 Beyonder.setSelectedAbility(Beyonder.getAbilityList().get(nextAbilityIndex < Beyonder.getAbilityList().size() ? nextAbilityIndex : 0));
                 Minecraft.getInstance().player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal(Beyonder.getSelectedAbility().toString()));
             }
         }
     }

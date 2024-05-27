@@ -19,6 +19,12 @@ public abstract class Ability {
         this.sequence = sequence;
     }
 
+    @Override
+    public String toString() {
+        return "Equipped: " + name + '\'' +
+                " with spiritualityUse of " + spiritualityUse;
+    }
+
     public CompoundTag toNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("name", this.name);
