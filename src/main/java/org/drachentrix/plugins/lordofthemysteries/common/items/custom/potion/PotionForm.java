@@ -26,7 +26,7 @@ public class PotionForm extends Item {
                 if (sequences.getSequence() != 9) {
                     player.displayClientMessage(
                             Component.literal("Pathetic for you Human to think, you could skip Sequences!"), true);
-                    Beyonder.addSanity(new Random().nextInt(0, 6));
+                    Beyonder.loseSanity(new Random().nextInt(0, 6));
                     return super.use(level, player, interactionHand);
                 }
                 Beyonder.setPathway(sequences.getPathway());
@@ -37,7 +37,8 @@ public class PotionForm extends Item {
                 if (!sequences.getPathway().equals(Beyonder.getPathway())) {
                     player.displayClientMessage(
                             Component.literal("You feel the Madness devouring you.\n You shouldn't have done that!"), true);
-                    Beyonder.addSanity(new Random().nextInt(0, 6));
+                    Beyonder.loseSanity(new Random().nextInt(0, 6));
+                    return super.use(level, player, interactionHand);
                 } else {
                     if (sequences.getSequence() < Beyonder.getSequence()) {
                         if (sequences.getSequence() + 1 == Beyonder.getSequence()) {
@@ -50,13 +51,15 @@ public class PotionForm extends Item {
                                         Component.literal("You're craziness has paid off, " +
                                                 "you succeeded in advancing from Sequence " + Beyonder.getSequence() + " to " + sequences.getSequence() + "!\n" +
                                                 "But you have changed..."), true);
-                                Beyonder.addSanity(Beyonder.getSanity() - new Random().nextInt(3, 10) * Math.abs(Beyonder.getSequence() - sequences.getSequence()));
+                                Beyonder.loseSanity(Beyonder.getSanity() - new Random().nextInt(3, 10) * Math.abs(Beyonder.getSequence() - sequences.getSequence()));
                                 Beyonder.setSequence(sequences.getSequence());
                             }
                         }
                     }
                 }
             }
+            Beyonder.looseSpirtiuality(sequences.getSpirituality());
+            Beyonder.setMaxSpirituality(sequences.getSpirituality());
         }
         return super.use(level, player, interactionHand);
     }

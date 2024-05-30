@@ -1,7 +1,5 @@
 package org.drachentrix.plugins.lordofthemysteries.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.Sequences;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 
@@ -14,6 +12,8 @@ public class Beyonder{
     private static int sequence;
     private static String pathway; //todo maybe mit enum oder feiner als string lösen
     private static double sanity = 100;
+    private static double spirituality;
+    private static double maxSpirituality;
 
 
     public static void reset(){
@@ -21,6 +21,8 @@ public class Beyonder{
         selectedAbility = null;
         sequence = -1;
         pathway = null;
+        spirituality = 0;
+        maxSpirituality = 0;
     }
 
     public static List<Ability> getAbilityList() {
@@ -51,7 +53,7 @@ public class Beyonder{
         return sanity;
     }
 
-    private static void setSanity(double newSanity) {
+    public static void setSanity(double newSanity) {
         if (newSanity < 0){
             sanity = 0;
             return;
@@ -59,9 +61,9 @@ public class Beyonder{
         sanity = newSanity;
     }
 
-    public static void addSanity(double add){
+    public static void loseSanity(double add){
         if (add > 0){
-            setSanity(getSanity() + add);
+            setSanity(getSanity() - add);
         }
     }
 
@@ -79,5 +81,29 @@ public class Beyonder{
 
     public static void setPathway(String newPathway) {
         pathway = newPathway;
+    }
+
+    public static double getSpirituality() {
+        return spirituality;
+    }
+
+    public static void setSpirituality(double spirituality) {
+        Beyonder.spirituality = spirituality;
+    }
+
+    public static boolean looseSpirtiuality(double spirituality) {
+        Beyonder.spirituality -= spirituality;
+        return !(Beyonder.spirituality < 0);
+    }
+
+    public static void gainSpirtuality(double toAdd){
+        setSpirituality(getSpirituality() + toAdd);
+    }
+    public static double getMaxSpirituality() {
+        return maxSpirituality;
+    }
+
+    public static void setMaxSpirituality(double maxSpirituality) {
+        Beyonder.maxSpirituality = maxSpirituality;
     }
 }

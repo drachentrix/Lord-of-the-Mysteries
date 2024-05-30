@@ -4,7 +4,6 @@ import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,19 +22,16 @@ import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FreezeTarget;
-import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
 import org.drachentrix.plugins.lordofthemysteries.common.world.DimTeleporter;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 
-import java.awt.*;
-import java.util.List;
-
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
     public static BlockPos playerPosition;
     public static int renderDistance;
+    private static int tickCounter = 0;
 
     @SubscribeEvent
     public static void registerKey(RegisterKeyMappingsEvent event) {
@@ -70,7 +67,14 @@ public class ClientEvents {
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
 
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
-                Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
+
+                if (Beyonder.looseSpirtiuality(Beyonder.getSelectedAbility().getSpiritualityUse())) {
+                    Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
+                } else {
+                    minecraft.player.displayClientMessage(Component.literal("You seem to have emptied you spirituality. Your madness rises "), true);
+                    Beyonder.loseSanity(50);
+                }
+
                 //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
 
             } else if (KeyBinding.ABILITY_CICLE_KEY.isDown()) {
@@ -120,8 +124,8 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingEntityUpdateEvent(LivingEvent.LivingTickEvent event){
-        if (!(event.getEntity() instanceof Player) && FreezeTarget.getFreezed()){
+    public static void onLivingEntityUpdateEvent(LivingEvent.LivingTickEvent event) {
+        if (!(event.getEntity() instanceof Player) && FreezeTarget.getFreezed()) {
             event.setCanceled(true);
         }
     }
@@ -142,6 +146,8 @@ public class ClientEvents {
                 Player player = event.getEntity();
                 Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
                 Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
+                Beyonder.looseSpirtiuality(player.getPersistentData().getDouble("Spirituality"));
+                Beyonder.setMaxSpirituality(player.getPersistentData().getDouble("MaxSpirituality"));
                 Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
                 Beyonder.loadAbilitys();
                 Beyonder.setSelectedAbility(AbilityRegistry.fromNBT((CompoundTag) player.getPersistentData().get("selectedAbility")));
@@ -163,10 +169,23 @@ public class ClientEvents {
                     player.getPersistentData().putString("Pathway", Beyonder.getPathway());
                     player.getPersistentData().putInt("Sequence", Beyonder.getSequence());
                     player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
+                    player.getPersistentData().putDouble("Spirituality", Beyonder.getSpirituality());
+                    player.getPersistentData().putDouble("MaxSpirituality", Beyonder.getMaxSpirituality());
                     CompoundTag tag = Beyonder.getSelectedAbility().toNBT();
                     player.getPersistentData().put("selectedAbility", tag);
                 }
             });
+        }
+    }
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            tickCounter++;
+
+            if (tickCounter == 10) {
+                Beyonder.gainSpirtuality(0.05f);
+                tickCounter = 0;
+            }
         }
     }
 }
