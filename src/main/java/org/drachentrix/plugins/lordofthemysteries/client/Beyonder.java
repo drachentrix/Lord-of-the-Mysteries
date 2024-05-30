@@ -51,12 +51,18 @@ public class Beyonder{
         return sanity;
     }
 
-    public static void setSanity(double newSanity) {
+    private static void setSanity(double newSanity) {
         if (newSanity < 0){
             sanity = 0;
             return;
         }
         sanity = newSanity;
+    }
+
+    public static void addSanity(double add){
+        if (add > 0){
+            setSanity(getSanity() + add);
+        }
     }
 
     public static int getSequence() {

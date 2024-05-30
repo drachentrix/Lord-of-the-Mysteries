@@ -3,22 +3,19 @@ package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pa
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
-
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.checkerframework.checker.units.qual.C;
+import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
+
+import java.util.ConcurrentModificationException;
 
 
 public class FlashTarget extends Ability {
@@ -29,10 +26,11 @@ public class FlashTarget extends Ability {
 
     }
 
-    public FlashTarget( int spiritualityUse, int sequence) {
+    public FlashTarget(int spiritualityUse, int sequence) {
         super("Flash Target", spiritualityUse, sequence);
         AbilityRegistry.registerAbility("Flash Target", this::fromNBT);
     }
+
     @Override
     public Ability fromNBT(CompoundTag nbt) {
         String name = nbt.getString("name");
@@ -51,29 +49,34 @@ public class FlashTarget extends Ability {
         boolean foundBlockOrEntity = false;
         BlockPos targetBlock = null;
 
-        for(double distance = 0; distance < reachDistance; distance += increment) {
+        for (double distance = 0; distance < reachDistance; distance += increment) {
             Vec3 rayEnd = playerPos.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
-            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-            if (result.getType() == HitResult.Type.BLOCK || result.getType() == HitResult.Type.ENTITY ){
+            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos, rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+            if (result.getType() == HitResult.Type.BLOCK || result.getType() == HitResult.Type.ENTITY) {
                 targetBlock = result.getBlockPos();
                 break;
             }
         }
 
-        if(!foundBlockOrEntity) {
-            Vec3 rayEnd = playerPos.add(lookVector.x  * reachDistance, lookVector.y  * reachDistance, lookVector.z  * reachDistance);
-            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos,rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
-            if (result.getType() == HitResult.Type.BLOCK){
+        if (!foundBlockOrEntity) {
+            Vec3 rayEnd = playerPos.add(lookVector.x * reachDistance, lookVector.y * reachDistance, lookVector.z * reachDistance);
+            BlockHitResult result = player.getCommandSenderWorld().clip(new ClipContext(playerPos, rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+            if (result.getType() == HitResult.Type.BLOCK) {
                 targetBlock = result.getBlockPos();
             }
         }
         if (targetBlock != null) {
-            for (int i = 0; i < 10; i++) {
-                LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, player.getCommandSenderWorld());
+            try {
+                Level serverLevel = Minecraft.getInstance().getSingleplayerServer().getLevel(player.level().dimension());
+                LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, serverLevel);
+
                 lightningBolt.setPos(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
-                player.getCommandSenderWorld().addFreshEntity(lightningBolt);
+                lightningBolt.setDamage(1f * (Beyonder.getSequence() % 9));
+                lightningBolt.setSecondsOnFire(1);
+                serverLevel.addFreshEntity(lightningBolt);
+
+            } catch (NullPointerException | ConcurrentModificationException ignored) {
             }
         }
-
     }
 }

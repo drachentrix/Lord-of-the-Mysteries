@@ -15,11 +15,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FreezeTarget;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
@@ -117,6 +119,12 @@ public class ClientEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLivingEntityUpdateEvent(LivingEvent.LivingTickEvent event){
+        if (!(event.getEntity() instanceof Player) && FreezeTarget.getFreezed()){
+            event.setCanceled(true);
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
