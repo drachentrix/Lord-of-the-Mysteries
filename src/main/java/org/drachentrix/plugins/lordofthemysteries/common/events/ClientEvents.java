@@ -146,7 +146,7 @@ public class ClientEvents {
                 Player player = event.getEntity();
                 Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
                 Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
-                Beyonder.looseSpirtiuality(player.getPersistentData().getDouble("Spirituality"));
+                Beyonder.setSpirituality(player.getPersistentData().getDouble("Spirituality"));
                 Beyonder.setMaxSpirituality(player.getPersistentData().getDouble("MaxSpirituality"));
                 Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
                 Beyonder.loadAbilitys();
@@ -183,7 +183,7 @@ public class ClientEvents {
             tickCounter++;
 
             if (tickCounter == 10) {
-                Beyonder.gainSpirtuality(0.05f);
+                Beyonder.gainSpirtuality(0.5f);
                 tickCounter = 0;
             }
         }

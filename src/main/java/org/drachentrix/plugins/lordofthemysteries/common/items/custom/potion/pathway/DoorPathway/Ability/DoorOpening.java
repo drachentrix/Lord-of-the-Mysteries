@@ -30,11 +30,11 @@ public class DoorOpening extends Ability{
         int playerZ = player.getBlockZ();
         Level world = player.getCommandSenderWorld();
 
+        BlockPos blockInFrontPos = new BlockPos((int) (playerX + player.getLookAngle().x) , (int) (playerY + player.getEyeHeight()) , (int) (playerZ + player.getLookAngle().z));
 
-        if (world.getBlockState(new BlockPos(playerX+1, playerY+1, playerZ)).getBlock() == Blocks.AIR){
+        if (world.getBlockState(blockInFrontPos).getBlock() == Blocks.AIR){
             Minecraft.getInstance().player.displayClientMessage(Component.literal("There is no wall to phase through"), true);
             return;
-
         }
         for (int i = 2; i <= 6; i++) {
             if (world.getBlockState(new BlockPos(playerX+i, playerY+1, playerZ)).getBlock() == Blocks.AIR){

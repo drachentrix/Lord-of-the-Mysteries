@@ -93,7 +93,11 @@ public class Beyonder{
 
     public static boolean looseSpirtiuality(double spirituality) {
         Beyonder.spirituality -= spirituality;
-        return !(Beyonder.spirituality < 0);
+        if(Beyonder.spirituality < 0){
+            Beyonder.spirituality = 0;
+            return false;
+        }
+        return true;
     }
 
     public static void gainSpirtuality(double toAdd){
