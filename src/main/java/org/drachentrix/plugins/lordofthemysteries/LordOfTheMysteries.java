@@ -40,7 +40,9 @@ public class LordOfTheMysteries {
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
-        MinecraftForge.EVENT_BUS.register(new PlayerMoveOnTicks());
+        MinecraftForge.EVENT_BUS.register(new PlayerMoveOnTicks(
+
+        ));
         MinecraftForge.EVENT_BUS.register(new SpiritualityBar());
 
         modEventBus.addListener(this::addCreative);
