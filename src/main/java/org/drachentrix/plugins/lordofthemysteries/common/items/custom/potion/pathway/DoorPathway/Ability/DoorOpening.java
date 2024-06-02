@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 
-public class DoorOpening extends Ability{
+public class DoorOpening extends Ability {
 
     public DoorOpening(String name, int spiritualityUse, int sequence) {
         super(name, spiritualityUse, sequence);
@@ -23,27 +23,34 @@ public class DoorOpening extends Ability{
     }
 
     @Override
-    public void onAbilityUse(LivingEntity player) {
+    public boolean onAbilityUse(LivingEntity player) {
 
-        int playerX = player.getBlockX();
-        int playerY = player.getBlockY();
-        int playerZ = player.getBlockZ();
+        double playerX = player.getBlockX();
+        double playerY = player.getBlockY();
+        double playerZ = player.getBlockZ();
         Level world = player.getCommandSenderWorld();
 
-        BlockPos blockInFrontPos = new BlockPos((int) (playerX + player.getLookAngle().x) , (int) (playerY + player.getEyeHeight()) , (int) (playerZ + player.getLookAngle().z));
+        double lookX = player.getLookAngle().x;
+        double lookY = player.getLookAngle().y ;
+        double lookZ = player.getLookAngle().z;
 
-        if (world.getBlockState(blockInFrontPos).getBlock() == Blocks.AIR){
+        BlockPos posToCheck = new BlockPos((int) Math.round(playerX + lookX), (int) Math.round(playerY + player.getEyeHeight() + lookY), (int) Math.round(playerZ + lookZ));
+        if (world.getBlockState(posToCheck).getBlock() == Blocks.AIR) {
             Minecraft.getInstance().player.displayClientMessage(Component.literal("There is no wall to phase through"), true);
-            return;
+            return false;
         }
-        for (int i = 2; i <= 6; i++) {
-            if (world.getBlockState(new BlockPos(playerX+i, playerY+1, playerZ)).getBlock() == Blocks.AIR){
-                player.setPos(playerX+i+1, playerY, playerZ);
-                return;
+
+        for (int i = 2; i <= 6; i++) { //problem mit manchen richtungen. Funktioniert ned ganz in alle
+            lookX = player.getLookAngle().x * i;
+            lookY = player.getLookAngle().y * i;
+            lookZ = player.getLookAngle().z * i;
+            posToCheck = new BlockPos((int) Math.round(playerX + lookX), (int) Math.round(playerY + player.getEyeHeight() + lookY), (int) Math.round(playerZ + lookZ));
+            if (world.getBlockState(posToCheck).getBlock() == Blocks.AIR) {
+                player.setPosRaw((int) Math.round(playerX + lookX), (int) Math.round(playerY + player.getEyeHeight() + lookY), (int) Math.round(playerZ + lookZ));
+                return true;
             }
         }
-        Minecraft.getInstance().player.displayClientMessage(Component.literal("The wall seems to be to thick"), true);
-
+        return false;
     }
 
     @Override
@@ -51,6 +58,6 @@ public class DoorOpening extends Ability{
         String name = nbt.getString("name");
         int sequence = nbt.getInt("sequence");
         int spiriualityUse = nbt.getInt("spiritualityUse");
-        return new DoorOpening(name, spiriualityUse,sequence);
+        return new DoorOpening(name, spiriualityUse, sequence);
     }
 }

@@ -68,8 +68,10 @@ public class ClientEvents {
 
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
 
-                if (Beyonder.looseSpirtiuality(Beyonder.getSelectedAbility().getSpiritualityUse())) {
-                    Beyonder.getSelectedAbility().onAbilityUse(minecraft.player);
+                if (Beyonder.isEnoughForAbility(Beyonder.getSelectedAbility().getSpiritualityUse())) {
+                    if (Beyonder.getSelectedAbility().onAbilityUse(minecraft.player)) { //maybe trotzdem die spirituality weg machen muss noch schauen
+                        Beyonder.looseSpirtiuality(Beyonder.getSelectedAbility().getSpiritualityUse());
+                    }
                 } else {
                     minecraft.player.displayClientMessage(Component.literal("You seem to have emptied you spirituality. Your madness rises "), true);
                     Beyonder.loseSanity(50);

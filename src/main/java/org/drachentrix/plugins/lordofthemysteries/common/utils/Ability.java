@@ -48,7 +48,7 @@ public abstract class Ability {
 
     public abstract Ability fromNBT(CompoundTag nbt);
 
-    public abstract void onAbilityUse(LivingEntity player);
+    public abstract boolean onAbilityUse(LivingEntity player);
 
     public void setName(String name) {
         this.name = name;

@@ -41,7 +41,7 @@ public class FreezeTarget extends Ability {
     }
 
     @Override
-    public void onAbilityUse(LivingEntity player) {
+    public boolean onAbilityUse(LivingEntity player) {
         Vec3 lookVec = player.getLookAngle();
         double rayLength = 12;
         Vec3 eyePosition = player.getEyePosition(1.5f);
@@ -61,11 +61,13 @@ public class FreezeTarget extends Ability {
                 player1.displayClientMessage(Component.literal("Entity  reached"), true);
                 stopMovement((LivingEntity) entity, 20 * (Beyonder.getSequence() % 9) + 20  );
 
-            } else {
-                Player player1 = (Player) player;
-                player1.displayClientMessage(Component.literal("Entity not reached"), true);
-            }
+            } //else {
+                //Player player1 = (Player) player;
+                //player1.displayClientMessage(Component.literal("Entity not reached"), true);
+                //return false;
+           //}
         }
+        return true;
     }
 
     private static boolean isWithinDistanceAndHeight(Player player, Entity entity, double maxDistance, double maxHeightDifference) {

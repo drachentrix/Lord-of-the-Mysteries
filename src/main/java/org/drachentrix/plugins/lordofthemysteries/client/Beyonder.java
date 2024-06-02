@@ -92,14 +92,16 @@ public class Beyonder{
     }
 
     public static boolean looseSpirtiuality(double spirituality) {
-        Beyonder.spirituality -= spirituality;
-        if(Beyonder.spirituality < 0){
-            Beyonder.spirituality = 0;
+        setSpirituality(Beyonder.getSpirituality() - spirituality);
+        if(Beyonder.getSpirituality() < 0){
+            Beyonder.setSpirituality(0);
             return false;
         }
         return true;
     }
-
+    public static boolean isEnoughForAbility(double loose){
+        return !(Beyonder.getSpirituality() - loose < 0);
+    }
     public static void gainSpirtuality(double toAdd){
         setSpirituality(getSpirituality() + toAdd);
     }

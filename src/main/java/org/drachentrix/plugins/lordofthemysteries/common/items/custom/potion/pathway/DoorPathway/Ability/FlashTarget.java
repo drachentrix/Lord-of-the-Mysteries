@@ -40,7 +40,7 @@ public class FlashTarget extends Ability {
     }
 
     @Override
-    public void onAbilityUse(LivingEntity player) {
+    public boolean onAbilityUse(LivingEntity player) {
         Vec3 playerPos = player.getEyePosition();
         Vec3 lookVector = player.getLookAngle();
         int reachDistance = 50;
@@ -74,9 +74,11 @@ public class FlashTarget extends Ability {
                 lightningBolt.setDamage(1f * (Beyonder.getSequence() % 9));
                 lightningBolt.setSecondsOnFire(1);
                 serverLevel.addFreshEntity(lightningBolt);
+                return true;
 
             } catch (NullPointerException | ConcurrentModificationException ignored) {
             }
         }
+        return false;
     }
 }
