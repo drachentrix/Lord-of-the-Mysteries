@@ -11,11 +11,6 @@ import java.util.List;
 
 public class Apprentice extends PotionForm{
 
-    private static final List<Ability> abilityList = new ArrayList<>(){{
-        add(new DoorOpening(100, 9));
-    }};
-
-    private static final List<Ingredient> ingredientList = new ArrayList<>();//todo nach erstellen der Ingredients einfügen
     public Apprentice() {
         super(Sequences.APPRENTICE);
     }

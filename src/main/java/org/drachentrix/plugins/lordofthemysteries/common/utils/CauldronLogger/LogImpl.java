@@ -17,6 +17,10 @@ public class LogImpl implements Log{
     }
 
     @Override
+    public ArrayList<BeyIngredient> readLog(){
+        return ingredients;
+    }
+    @Override
     public void clearLog() {
         ingredients.clear();
     }

@@ -26,4 +26,5 @@ public class ItemRegister {
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }
+    //NAME HIER SOLL DEM NAMEN IM ENUM GLEICHEN SONST PROBLEME
 }
