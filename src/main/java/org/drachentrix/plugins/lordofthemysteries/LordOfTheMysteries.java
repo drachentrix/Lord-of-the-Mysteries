@@ -19,6 +19,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import org.drachentrix.plugins.lordofthemysteries.client.overlay.SpiritualityBar;
+import org.drachentrix.plugins.lordofthemysteries.common.blocks.BlocksRegister;
 import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.events.PlayerMoveOnTicks;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
@@ -45,10 +46,11 @@ public class LordOfTheMysteries {
         ));
         MinecraftForge.EVENT_BUS.register(new SpiritualityBar());
 
-        modEventBus.addListener(this::addCreative);
+        //modEventBus.addListener(this::addCreative);
 
         SpiritWorld.register();
         ItemRegister.register(modEventBus);
+        BlocksRegister.register(modEventBus);
         ItemCreativeTab.register(modEventBus);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
@@ -58,13 +60,13 @@ public class LordOfTheMysteries {
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+   /* private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ItemRegister.APPRENTICE_POTION);
             event.accept(ItemRegister.TRICKMASTER_POTION);
             event.accept(ItemRegister.RESET);
         }
-    }
+    } */
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {

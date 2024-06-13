@@ -1,5 +1,6 @@
 package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,6 +16,7 @@ import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Scheduler;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FreezeTarget extends Ability {
     private static boolean isFreezed =false;

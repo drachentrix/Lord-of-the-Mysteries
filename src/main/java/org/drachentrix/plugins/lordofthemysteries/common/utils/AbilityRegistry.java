@@ -16,11 +16,14 @@ public class AbilityRegistry {
     }
 
     public static Ability fromNBT(CompoundTag nbt) {
-        String type = nbt.getString("name");
-        Function<CompoundTag, Ability> constructor = registry.get(type);
-        if (constructor != null) {
-            return constructor.apply(nbt);
+        if (nbt != null) {
+            String type = nbt.getString("name");
+            Function<CompoundTag, Ability> constructor = registry.get(type);
+            if (constructor != null) {
+                return constructor.apply(nbt);
+            }
+            throw new IllegalArgumentException("Unknown ability type: " + type);
         }
-        throw new IllegalArgumentException("Unknown ability type: " + type);
+        return null;
     }
 }

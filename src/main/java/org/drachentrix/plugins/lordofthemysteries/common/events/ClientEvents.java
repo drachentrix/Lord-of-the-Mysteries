@@ -27,6 +27,8 @@ import org.drachentrix.plugins.lordofthemysteries.common.utils.KeyBinding;
 import org.drachentrix.plugins.lordofthemysteries.common.world.DimTeleporter;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = LordOfTheMysteries.MODID, value = Dist.CLIENT)
 public class ClientEvents {
     public static BlockPos playerPosition;
@@ -45,7 +47,7 @@ public class ClientEvents {
     public static void onKeyInput(InputEvent.Key key) {
         if (Beyonder.getPathway() != null) {
             Minecraft minecraft = Minecraft.getInstance();
-            ServerPlayer player = minecraft.getSingleplayerServer().getPlayerList().getPlayerByName(minecraft.player.getGameProfile().getName());
+            ServerPlayer player = Objects.requireNonNull(minecraft.getSingleplayerServer()).getPlayerList().getPlayerByName(minecraft.player.getGameProfile().getName());
 
             if (KeyBinding.ABILIY_SWITCH_DIMENSION.isDown()) {
                 ResourceKey<Level> destDim = Level.OVERWORLD == player.level().dimension() ? SpiritWorld.SPIRIT_WORLD_LEVEL_KEY : Level.OVERWORLD;
