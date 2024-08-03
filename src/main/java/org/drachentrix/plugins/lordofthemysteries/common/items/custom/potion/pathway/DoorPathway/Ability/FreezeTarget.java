@@ -61,7 +61,7 @@ public class FreezeTarget extends Ability {
             if (entity instanceof LivingEntity) {
                 Player player1 = (Player) player;
                 player1.displayClientMessage(Component.literal("Entity  reached"), true);
-                stopMovement((LivingEntity) entity, 20 * (Beyonder.getSequence() % 9) + 20  );
+                stopMovement((LivingEntity) entity, 20 + (Beyonder.getSequence() % 9) + 20  );
 
             } //else {
                 //Player player1 = (Player) player;

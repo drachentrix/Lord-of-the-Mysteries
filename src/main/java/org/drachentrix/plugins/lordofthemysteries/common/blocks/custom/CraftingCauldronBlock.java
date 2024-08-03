@@ -3,16 +3,17 @@ package org.drachentrix.plugins.lordofthemysteries.common.blocks.custom;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -56,7 +57,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState pState, Rotation rotation) {
+    public @NotNull BlockState rotate(BlockState pState, Rotation rotation) {
         return pState.setValue(FACING, rotation.rotate(pState.getValue(FACING)));
     }
 
@@ -66,7 +67,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
@@ -74,21 +75,22 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     @ParametersAreNonnullByDefault
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
-        if (interactionHand == InteractionHand.OFF_HAND){
-            Map<Boolean, Sequences> recipe = checkForValidRecipe();
-            if (!recipe.keySet().isEmpty() && validHeatBlock(blockPos)){ //maybe noch adden ob es richtige heat hat
-                ResourceLocation itemLoc = new ResourceLocation("lordofthemysteries", recipe.get(true).getPotionName());
+        if (interactionHand == InteractionHand.MAIN_HAND && player.getItemInHand(interactionHand).is(Items.GLASS_BOTTLE)) {
+            Sequences recipe = checkForValidRecipe();
+            if (recipe != null && validHeatBlock(blockPos)) { //maybe noch adden ob es richtige heat hat
+                ResourceLocation itemLoc = new ResourceLocation("lordofthemysteries", recipe.getPotionName());
                 Item item = ForgeRegistries.ITEMS.getValue(itemLoc);
-                if (item != null){
+                if (item != null) {
                     ItemStack itemStack = new ItemStack(item); //spaeter check obs wirklich geht
                     player.getInventory().add(itemStack);
+                    player.getMainHandItem().setCount(player.getMainHandItem().getCount() - 1);
                 }
-            } else{
+            } else {
                 // konsequenz noch adden (Geplant so ne giftwolke und dann von dem Pathway der am meisten ähnelt ein Artifact
             }
             logger.clearLog();
-        } else if (interactionHand == InteractionHand.MAIN_HAND && !player.getMainHandItem().is(ItemStack.EMPTY.getItem())){
-            if (player.getMainHandItem().getItem() instanceof BeyIngredient && blockState.getFluidState().is(Fluids.WATER)){
+        } else if (interactionHand == InteractionHand.MAIN_HAND && !player.getMainHandItem().is(ItemStack.EMPTY.getItem())) {
+            if (player.getMainHandItem().getItem() instanceof BeyIngredient && blockState.getFluidState().is(Fluids.WATER)) {
                 logger.add((BeyIngredient) player.getMainHandItem().getItem());
                 player.getInventory().removeItem(player.getMainHandItem());
             }
@@ -96,32 +98,28 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
         return super.use(blockState, level, blockPos, player, interactionHand, hitResult);
     }
 
-    private Map<Boolean, Sequences> checkForValidRecipe(){
+    private Sequences checkForValidRecipe() {
         boolean check;
-        for(Sequences sequences: Sequences.getAllSequences()) {
+        for (Sequences sequence : Sequences.getAllSequences()) {
             check = true;
             for (BeyIngredient ingredient : logger.readLog()) {
-                if (!sequences.getIngredientList().contains(ingredient)){
+                if (!sequence.getIngredientList().contains(ingredient)) {
                     check = false;
                     break;
                 }
             }
-            if (check){
-                HashMap<Boolean, Sequences> tmp = new HashMap<>();
-                tmp.put(check, sequences);
-                return tmp;
+            if (check) {
+            return sequence;
 
             }
         }
-        return new HashMap<>();
+        return null;
 
     }
 
-    private boolean validHeatBlock(BlockPos pos){
-        BlockPos beneath = pos.below();
-        return Arrays.stream(heatingBlocks).anyMatch(block -> {
-            assert Minecraft.getInstance().player != null;
-            return defaultBlockState() == Minecraft.getInstance().player.level().getBlockState(beneath);
-        });
+    private boolean validHeatBlock(BlockPos pos) {
+        return Arrays.stream(heatingBlocks)
+                .anyMatch(block -> block.defaultBlockState() == Minecraft.getInstance().player.level().getBlockState(pos.below()));
+
     }
 }
