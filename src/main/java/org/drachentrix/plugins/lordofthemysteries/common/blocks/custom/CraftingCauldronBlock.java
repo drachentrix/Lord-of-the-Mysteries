@@ -1,5 +1,6 @@
 package org.drachentrix.plugins.lordofthemysteries.common.blocks.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -8,12 +9,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CauldronBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,20 +24,50 @@ import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.Seq
 import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyIngredient;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.CauldronLogger.LogImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
-public class CraftingCauldron extends CauldronBlock {
+public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
 
     private final LogImpl logger;
     private static final Block[] heatingBlocks = {Blocks.FIRE, Blocks.MAGMA_BLOCK, Blocks.LAVA};
 
-    public CraftingCauldron() {
-        super(Properties.of().sound(SoundType.METAL).explosionResistance(1).destroyTime(2.0f));
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+    public CraftingCauldronBlock(Properties properties) {
+        super(properties);
         logger = new LogImpl();
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return simpleCodec((Function<Properties, ? extends HorizontalDirectionalBlock>) CraftingCauldronBlock::new);
+    }
+
+    @Override
+    public BlockState rotate(BlockState pState, Rotation rotation) {
+        return pState.setValue(FACING, rotation.rotate(pState.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState blockState, Mirror mirror) {
+        return blockState.rotate(mirror.getRotation(blockState.getValue(FACING)));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder){
+        builder.add(FACING);
     }
 
     @NotNull

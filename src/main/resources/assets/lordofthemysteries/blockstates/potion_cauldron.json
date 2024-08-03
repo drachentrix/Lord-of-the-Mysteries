@@ -1,21 +1,19 @@
 {
   "variants": {
-    "": {
-      "facing=north": {
-        "model": "lordofthemysteries:block/potion_cauldron"
-      },
-      "facing=east": {
-        "model": "lordofthemysteries:block/potion_cauldron",
-        "y": 90
-      },
-      "facing=south": {
-        "model": "lordofthemysteries:block/potion_cauldron",
-        "y": 180
-      },
-      "facing=west": {
-        "model": "lordofthemysteries:block/potion_cauldron",
-        "y": 270
-      }
+    "facing=north": {
+      "model": "lordofthemysteries:block/potion_cauldron"
+    },
+    "facing=east": {
+      "model": "lordofthemysteries:block/potion_cauldron",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lordofthemysteries:block/potion_cauldron",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lordofthemysteries:block/potion_cauldron",
+      "y": 270
     }
   }
 }
