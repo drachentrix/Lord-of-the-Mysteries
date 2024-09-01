@@ -1,16 +1,17 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils;
 
 import net.minecraft.world.item.Item;
-
 import java.util.Objects;
 
-public class BeyIngredient extends Item {
+public class BeyonderIngredient extends Item {
+
+    private final String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BeyIngredient that = (BeyIngredient) o;
+        BeyonderIngredient that = (BeyonderIngredient) o;
         return Objects.equals(name, that.name);
     }
 
@@ -19,8 +20,8 @@ public class BeyIngredient extends Item {
         return Objects.hashCode(name);
     }
 
-    private String name;
-    public BeyIngredient(Properties p_41383_) {
+    public BeyonderIngredient(Properties p_41383_, String name) {
         super(p_41383_);
+        this.name = name;
     }
 }

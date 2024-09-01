@@ -1,4 +1,6 @@
 {
+  "lordofthemysteries.creative_tab": "LordOfTheMysteries",
+
   "key.lordofthemysteries.ability": "Lord of the Mysteries ability",
   "key.lordofthemysteries.ability_use": "Use Ability",
   "key.lordofthemysteries.ability_cycle": "Cycle Ability's",
@@ -8,6 +10,8 @@
   "item.lordofthemysteries.apprentice_potion": "Apprentice",
   "item.lordofthemysteries.trickmaster_potion": "Trickmaster",
   "item.lordofthemysteries.reset": "Become Human again",
-  "lordofthemysteries.creative_tab": "LordOfTheMysteries",
+
+  "item.lordofthemysteries.spirit_eater_stomach_pouch": "Stomach Pouch of Spirit Eater",
+
   "block.lordofthemysteries.potion_cauldron": "Potion Brewer"
 }

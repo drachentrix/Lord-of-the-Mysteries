@@ -24,6 +24,7 @@ import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.events.PlayerMoveOnTicks;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.ingredients.IngredientsRegister;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 import org.slf4j.Logger;
 
@@ -50,6 +51,7 @@ public class LordOfTheMysteries {
 
         SpiritWorld.register();
         ItemRegister.register(modEventBus);
+        IngredientsRegister.register(modEventBus);
         BlocksRegister.register(modEventBus);
         ItemCreativeTab.register(modEventBus);
 

@@ -1,23 +1,22 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils.CauldronLogger;
 
-import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyIngredient;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyonderIngredient;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 
 public class LogImpl implements Log{
 
 
-    private final ArrayList<BeyIngredient> ingredients = new ArrayList<>();
+    private final ArrayList<BeyonderIngredient> ingredients = new ArrayList<>();
 
     @Override
-    public void add(BeyIngredient ingredient) {
+    public void add(BeyonderIngredient ingredient) {
         ingredients.add(ingredient);
     }
 
     @Override
-    public ArrayList<BeyIngredient> readLog(){
+    public ArrayList<BeyonderIngredient> readLog(){
         return ingredients;
     }
     @Override

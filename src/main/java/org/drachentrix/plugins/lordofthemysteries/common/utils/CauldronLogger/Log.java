@@ -1,14 +1,14 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils.CauldronLogger;
 
-import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyIngredient;
+import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyonderIngredient;
 
 import java.util.ArrayList;
 
 public interface Log{
 
-    void add(BeyIngredient ingredient);
+    void add(BeyonderIngredient ingredient);
 
     void clearLog();
 
-    ArrayList<BeyIngredient> readLog();
+    ArrayList<BeyonderIngredient> readLog();
 }
