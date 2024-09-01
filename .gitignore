@@ -19,6 +19,9 @@ atlassian-ide-plugin.xml
 # Log file
 *.log
 
+# BlockBench files
+*.bbmodel
+
 # BlueJ files
 *.ctxt
 
@@ -116,9 +119,3 @@ run/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-
-# BlockBench files
-*.bbmodel~
-
-# Autosave files
-.autosave-*.bbmodel
