@@ -1,9 +1,8 @@
 package org.drachentrix.plugins.lordofthemysteries.common.utils;
 
-import net.minecraft.world.item.Item;
 import java.util.Objects;
 
-public class BeyonderIngredient extends Item {
+public class BeyonderIngredient extends net.minecraft.world.item.Item {
 
     private final String name;
 

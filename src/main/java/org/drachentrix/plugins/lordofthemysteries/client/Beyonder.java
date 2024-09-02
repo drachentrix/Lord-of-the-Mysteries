@@ -9,6 +9,7 @@ import java.util.List;
 public class Beyonder{
     private static List<Ability> abilityList = new ArrayList<>();
     private static Ability selectedAbility;
+    private static boolean isBeyonder = false;
     private static int sequence;
     private static String pathway; //todo maybe mit enum oder feiner als string lösen
     private static double sanity = 100;
@@ -23,6 +24,7 @@ public class Beyonder{
         pathway = null;
         spirituality = 0;
         maxSpirituality = 0;
+        isBeyonder = false;
     }
 
     public static List<Ability> getAbilityList() {
@@ -112,4 +114,8 @@ public class Beyonder{
     public static void setMaxSpirituality(double maxSpirituality) {
         Beyonder.maxSpirituality = maxSpirituality;
     }
+
+    public static boolean isBeyonder() {return isBeyonder;}
+
+    public static void setBeyonderStatusActive() {Beyonder.isBeyonder = true;}
 }

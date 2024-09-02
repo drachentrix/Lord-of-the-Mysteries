@@ -1,19 +1,10 @@
 {
   "variants": {
-    "facing=north": {
+    "level=1": {
       "model": "lordofthemysteries:block/potion_cauldron"
     },
-    "facing=east": {
-      "model": "lordofthemysteries:block/potion_cauldron",
-      "y": 90
-    },
-    "facing=south": {
-      "model": "lordofthemysteries:block/potion_cauldron",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "lordofthemysteries:block/potion_cauldron",
-      "y": 270
+    "level=2": {
+      "model": "lordofthemysteries:block/potion_cauldron_filled"
     }
   }
 }

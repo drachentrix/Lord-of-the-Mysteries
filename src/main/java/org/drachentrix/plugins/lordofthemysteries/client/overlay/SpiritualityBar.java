@@ -26,7 +26,7 @@ public class SpiritualityBar {
     public void onRenderGui(RenderGuiOverlayEvent.Post event){
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (player == null || Beyonder.getPathway() == null){
+        if (player == null || !Beyonder.isBeyonder()){
             return;
         }
         double currentSpir = Beyonder.getSpirituality();

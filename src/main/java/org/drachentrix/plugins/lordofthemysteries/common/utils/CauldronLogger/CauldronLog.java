@@ -4,7 +4,7 @@ import org.drachentrix.plugins.lordofthemysteries.common.utils.BeyonderIngredien
 
 import java.util.ArrayList;
 
-public interface Log{
+public interface CauldronLog {
 
     void add(BeyonderIngredient ingredient);
 

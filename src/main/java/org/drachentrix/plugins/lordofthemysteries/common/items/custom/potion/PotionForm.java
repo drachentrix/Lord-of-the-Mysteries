@@ -22,7 +22,7 @@ public class PotionForm extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if (!level.isClientSide) {
-            if (Beyonder.getPathway() == null) {
+            if (Beyonder.isBeyonder()) {
                 if (sequences.getSequence() != 9) {
                     player.displayClientMessage(
                             Component.literal("Pathetic for you Human to think, you could skip Sequences!"), true);
