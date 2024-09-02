@@ -19,6 +19,9 @@ atlassian-ide-plugin.xml
 # Log file
 *.log
 
+# BlockBench files
+*.bbmodel
+
 # BlueJ files
 *.ctxt
 
