@@ -9,7 +9,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.drachentrix.plugins.lordofthemysteries.common.blocks.BlocksRegister;
-import org.drachentrix.plugins.lordofthemysteries.common.items.custom.ingredients.IngredientsRegister;
 
 public class ItemCreativeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
@@ -24,6 +23,7 @@ public class ItemCreativeTab {
                         output.accept(ItemRegister.TRICKMASTER_POTION.get());
                         output.accept(BlocksRegister.CRAFTING_CAULDRON.get());
                         output.accept(IngredientsRegister.SPIRIT_EATER_STOMACH_POUCH.get());
+                        output.accept(IngredientsRegister.DEEP_SEA_MARLINS_BLOOD.get());
                     } )
                     .build());
 

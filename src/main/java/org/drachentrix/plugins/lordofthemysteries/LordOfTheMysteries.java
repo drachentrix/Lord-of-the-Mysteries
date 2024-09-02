@@ -4,10 +4,8 @@ import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,7 +22,7 @@ import org.drachentrix.plugins.lordofthemysteries.common.events.ClientEvents;
 import org.drachentrix.plugins.lordofthemysteries.common.events.PlayerMoveOnTicks;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemCreativeTab;
 import org.drachentrix.plugins.lordofthemysteries.common.items.ItemRegister;
-import org.drachentrix.plugins.lordofthemysteries.common.items.custom.ingredients.IngredientsRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.items.IngredientsRegister;
 import org.drachentrix.plugins.lordofthemysteries.common.world.SpiritWorld;
 import org.slf4j.Logger;
 
