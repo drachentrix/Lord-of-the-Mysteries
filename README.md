@@ -1,7 +1,5 @@
-# Lord-of-the-Mysteries
 
-## This is a mod that has been inspired by the power system of the novel "Lord of the Mysteries" by Cuttlefish.
-### This will mostly adept and hold to the system but for most sequences or other stuff we will ned to work with placeholders
-
-
-# For the beginning it will probably only work in Singleplayer
+## This is a mod, which tries to implement the power system of the novel "Lord of the Mysteries" by Cuttlefish That Loves Diving.
+### Not everything will be added 1:1 like in the novel. For some things there will be replacements or placeholders.
+#### This will contain content of "Circle Of Inevitability" in the future.
+## For the beginning it will probably only work in Singleplayer
