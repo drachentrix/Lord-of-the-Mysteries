@@ -6,8 +6,6 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 import org.lwjgl.glfw.GLFW;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
-
 public class KeyBinding {
 
     public static final String KEY_CATEGORY_ABILITY = "key." + LordOfTheMysteries.MODID + ".ability";
