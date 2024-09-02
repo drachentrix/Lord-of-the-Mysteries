@@ -1,6 +1,7 @@
 package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion;
 
 import net.minecraft.world.item.Item;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.ingredients.SpiritEaterStomachPouch;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.DoorOpening;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FlashTarget;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FreezeTarget;
@@ -17,7 +18,9 @@ public enum Sequences{
     TRICKMASTER(new ArrayList<>(){{
         add(new FreezeTarget(20, 8));
         add(new FlashTarget(30, 8));
-    }}, new ArrayList<>(), "Trickmaster", "trickmaster_potion" , 8, "Door", 250);
+    }}, new ArrayList<>(){{
+        add(new SpiritEaterStomachPouch());
+    }}, "Trickmaster", "trickmaster_potion" , 8, "Door", 250);
 
     private final List<Ability> abilityList;
     private final List<BeyonderIngredient> ingredientList;
