@@ -148,9 +148,9 @@ public class ClientEvents {
             }
             serverPlayer.getServer().execute(() -> {
                 Player player = event.getEntity();
+                Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
                 if (player.getPersistentData().getBoolean("isBeyonder")){
                     Beyonder.setPathway(player.getPersistentData().getString("Pathway"));
-                    Beyonder.setSanity(player.getPersistentData().getDouble("Sanity"));
                     Beyonder.setSpirituality(player.getPersistentData().getDouble("Spirituality"));
                     Beyonder.setMaxSpirituality(player.getPersistentData().getDouble("MaxSpirituality"));
                     Beyonder.setSequence(player.getPersistentData().getInt("Sequence"));
@@ -175,13 +175,13 @@ public class ClientEvents {
                 if (Beyonder.isBeyonder()) {
                     player.getPersistentData().putString("Pathway", Beyonder.getPathway());
                     player.getPersistentData().putInt("Sequence", Beyonder.getSequence());
-                    player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
                     player.getPersistentData().putDouble("Spirituality", Beyonder.getSpirituality());
                     player.getPersistentData().putDouble("MaxSpirituality", Beyonder.getMaxSpirituality());
                     CompoundTag tag = Beyonder.getSelectedAbility().toNBT();
                     player.getPersistentData().put("selectedAbility", tag);
                 }
                 player.getPersistentData().putBoolean("isBeyonder", Beyonder.isBeyonder());
+                player.getPersistentData().putDouble("Sanity", Beyonder.getSanity());
             });
         }
     }

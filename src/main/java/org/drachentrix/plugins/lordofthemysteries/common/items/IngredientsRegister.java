@@ -18,6 +18,9 @@ public class IngredientsRegister {
     public static final RegistryObject<Item> DEEP_SEA_MARLINS_BLOOD = INGREDIENTS.register("deep_sea_marlins_blood",
             () -> new BeyonderIngredient(new Item.Properties().stacksTo(1), "Deep Sea Marlin's Blood"));
 
+    public static final RegistryObject<Item> HORNBEAM_ESSENTIALS_OIL = INGREDIENTS.register("hornbeam_essentials_oil",
+            () -> new BeyonderIngredient(new Item.Properties().stacksTo(1), "Hornbeam Essential Oils"));
+
     public static void register(IEventBus eventBus){
         INGREDIENTS.register(eventBus);
     }

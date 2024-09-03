@@ -22,16 +22,18 @@ public class PotionForm extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if (!level.isClientSide) {
-            if (Beyonder.isBeyonder()) {
+            if (!Beyonder.isBeyonder()) {
                 if (sequences.getSequence() != 9) {
                     player.displayClientMessage(
                             Component.literal("Pathetic for you Human to think, you could skip Sequences!"), true);
-                    Beyonder.loseSanity(new Random().nextInt(0, 6));
+                    Beyonder.loseSanity(new Random().nextInt(10, 60));
                     return super.use(level, player, interactionHand);
                 }
                 Beyonder.setPathway(sequences.getPathway());
                 Beyonder.setSequence(sequences.getSequence());
+                Beyonder.setBeyonderStatusActive();
                 sequences.getAbilityList().forEach(Beyonder::addAbility);
+                Beyonder.setSelectedAbility(sequences.getAbilityList().get(0));
                 player.displayClientMessage(Component.literal("You successfully became a sequence 9 Beyonder of the Pathway " + sequences.getPathway()), true);
             } else {
                 if (!sequences.getPathway().equals(Beyonder.getPathway())) {
@@ -58,7 +60,7 @@ public class PotionForm extends Item {
                     }
                 }
             }
-            Beyonder.looseSpirtiuality(sequences.getSpirituality());
+            Beyonder.setSpirituality(sequences.getSpirituality());
             Beyonder.setMaxSpirituality(sequences.getSpirituality());
         }
         return super.use(level, player, interactionHand);

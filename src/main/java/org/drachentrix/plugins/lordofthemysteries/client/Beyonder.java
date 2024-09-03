@@ -2,7 +2,6 @@ package org.drachentrix.plugins.lordofthemysteries.client;
 
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.Sequences;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
-
 import java.util.ArrayList;
 import java.util.List;
 

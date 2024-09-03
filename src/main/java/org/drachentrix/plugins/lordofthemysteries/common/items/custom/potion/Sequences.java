@@ -22,6 +22,7 @@ public enum Sequences {
     }}, new ArrayList<>() {{
         add(IngredientsRegister.SPIRIT_EATER_STOMACH_POUCH);
         add(IngredientsRegister.DEEP_SEA_MARLINS_BLOOD);
+        add(IngredientsRegister.HORNBEAM_ESSENTIALS_OIL);
     }}, "Trickmaster", "trickmaster_potion", 8, "Door", 250);
 
     private final List<Ability> abilityList;

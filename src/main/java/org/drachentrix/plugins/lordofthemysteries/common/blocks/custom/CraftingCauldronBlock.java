@@ -76,6 +76,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     @ParametersAreNonnullByDefault
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
+
         if (player.getItemInHand(interactionHand).is(Items.WATER_BUCKET) && blockState.getValue(LEVEL).equals(1)) {
             level.setBlock(blockPos, blockState.setValue(LEVEL, 2), 3);
             player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
@@ -85,27 +86,29 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
             player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        if (interactionHand == InteractionHand.MAIN_HAND && player.getItemInHand(interactionHand).is(Items.GLASS_BOTTLE) && blockState.getValue(LEVEL).equals(2)) {
-            Sequences recipe = checkForValidRecipe();
-            if (recipe != null && validHeatBlock(blockPos)) { //maybe noch adden ob es richtige heat hat
-                ResourceLocation itemLoc = new ResourceLocation("lordofthemysteries", recipe.getPotionName());
-                net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLoc);
-                if (item != null) {
-                    ItemStack itemStack = new ItemStack(item); //spaeter check obs wirklich geht
-                    player.getInventory().add(itemStack);
-                    player.getMainHandItem().setCount(player.getMainHandItem().getCount() - 1);
+        if (!level.isClientSide) {
+            if (player.getItemInHand(interactionHand).is(Items.GLASS_BOTTLE) && blockState.getValue(LEVEL).equals(2)) {
+                Sequences recipe = checkForValidRecipe();
+                if (recipe != null && validHeatBlock(blockPos)) { //maybe noch adden ob es richtige heat hat
+                    ResourceLocation itemLoc = new ResourceLocation("lordofthemysteries", recipe.getPotionName());
+                    net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLoc);
+                    if (item != null) {
+                        ItemStack itemStack = new ItemStack(item); //spaeter check obs wirklich geht
+                        player.getInventory().add(itemStack);
+                        player.getMainHandItem().setCount(player.getMainHandItem().getCount() - 1);
+                    }
+                } else {
+                    // konsequenz noch adden (Geplant so ne giftwolke und dann von dem Pathway der am meisten ähnelt ein Artifact
                 }
-            } else {
-                // konsequenz noch adden (Geplant so ne giftwolke und dann von dem Pathway der am meisten ähnelt ein Artifact
-            }
-            logger.clearLog();
-        } else if (interactionHand == InteractionHand.MAIN_HAND && !player.getMainHandItem().is(ItemStack.EMPTY.getItem())) {
-            if (player.getMainHandItem().getItem() instanceof BeyonderIngredient && blockState.getValue(LEVEL).equals(2)) {
-                logger.add((BeyonderIngredient) player.getMainHandItem().getItem());
-                player.getInventory().removeItem(player.getMainHandItem());
+                logger.clearLog();
+            } else if (!player.getMainHandItem().is(ItemStack.EMPTY.getItem())) {
+                if (player.getItemInHand(interactionHand).getItem() instanceof BeyonderIngredient && blockState.getValue(LEVEL).equals(2)) {
+                    logger.add((BeyonderIngredient) player.getItemInHand(interactionHand).getItem());
+                    player.getInventory().removeItem(player.getMainHandItem());
+                }
             }
         }
-        return super.use(blockState, level, blockPos, player, interactionHand, hitResult);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     private Sequences checkForValidRecipe() {
@@ -114,6 +117,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
 
         if (!ingredientList.isEmpty()) {
             List<Sequences> sequences = Beyonder.isBeyonder() ? Sequences.getSequencesBasedOnPathway(Beyonder.getPathway()) : Sequences.getAllSequences();
+            int usedIngredients = 0;
             for (Sequences sequence : sequences) {
                 check = true;
                 for (BeyonderIngredient ingredient : ingredientList) {
@@ -121,8 +125,9 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
                         check = false;
                         break;
                     }
+                    usedIngredients++;
                 }
-                if (check) {
+                if (check && usedIngredients == sequence.getIngredientList().size()) {
                     return sequence;
 
                 }
