@@ -6,9 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.drachentrix.plugins.lordofthemysteries.LordOfTheMysteries;
 
 public class SpiritWorld {
@@ -20,9 +17,5 @@ public class SpiritWorld {
     public static final ResourceKey<DimensionType> SPIRIT_WORLD_DIMENSION_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
             new ResourceLocation(LordOfTheMysteries.MODID, "spirit_world_type"));
 
-    public static void register(){
-    }
-
-
-
+    public static void register(){}
 }

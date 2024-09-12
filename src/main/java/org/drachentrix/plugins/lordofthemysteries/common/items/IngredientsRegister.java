@@ -21,6 +21,12 @@ public class IngredientsRegister {
     public static final RegistryObject<Item> HORNBEAM_ESSENTIALS_OIL = INGREDIENTS.register("hornbeam_essentials_oil",
             () -> new BeyonderIngredient(new Item.Properties().stacksTo(1), "Hornbeam Essential Oils"));
 
+    public static final RegistryObject<Item> STRING_GRASS_POWDER = INGREDIENTS.register("string_grass_powder",
+            () -> new BeyonderIngredient(new Item.Properties().stacksTo(1), "String Grass Powder"));
+
+    public static final RegistryObject<Item> RED_CHESTNUT_FLOWER = INGREDIENTS.register("red_chestnut_flower",
+            () -> new BeyonderIngredient(new Item.Properties().stacksTo(1), "Red Chestnut Flower"));
+
     public static void register(IEventBus eventBus){
         INGREDIENTS.register(eventBus);
     }

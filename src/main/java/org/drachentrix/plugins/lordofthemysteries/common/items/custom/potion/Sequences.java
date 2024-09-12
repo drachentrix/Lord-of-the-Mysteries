@@ -3,6 +3,7 @@ package org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 import org.drachentrix.plugins.lordofthemysteries.common.items.IngredientsRegister;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.BurningTarget;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.DoorOpening;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FlashTarget;
 import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.pathway.DoorPathway.Ability.FreezeTarget;
@@ -19,6 +20,7 @@ public enum Sequences {
     TRICKMASTER(new ArrayList<>() {{
         add(new FreezeTarget(20, 8));
         add(new FlashTarget(30, 8));
+        add(new BurningTarget(30, 8));
     }}, new ArrayList<>() {{
         add(IngredientsRegister.SPIRIT_EATER_STOMACH_POUCH);
         add(IngredientsRegister.DEEP_SEA_MARLINS_BLOOD);

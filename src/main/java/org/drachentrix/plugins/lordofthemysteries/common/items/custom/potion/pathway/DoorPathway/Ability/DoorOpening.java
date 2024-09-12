@@ -25,11 +25,10 @@ public class DoorOpening extends Ability {
     @Override
     public boolean onAbilityUse(LivingEntity player) {
 
+        Level world = player.getCommandSenderWorld();
         double playerX = player.getBlockX();
         double playerY = player.getBlockY();
         double playerZ = player.getBlockZ();
-        Level world = player.getCommandSenderWorld();
-
         double lookX = player.getLookAngle().x;
         double lookY = player.getLookAngle().y ;
         double lookZ = player.getLookAngle().z;

@@ -25,6 +25,8 @@ public class ItemCreativeTab {
                         output.accept(IngredientsRegister.SPIRIT_EATER_STOMACH_POUCH.get());
                         output.accept(IngredientsRegister.DEEP_SEA_MARLINS_BLOOD.get());
                         output.accept(IngredientsRegister.HORNBEAM_ESSENTIALS_OIL.get());
+                        output.accept(IngredientsRegister.STRING_GRASS_POWDER.get());
+                        output.accept(IngredientsRegister.RED_CHESTNUT_FLOWER.get());
                     } )
                     .build());
 

@@ -34,12 +34,12 @@ public class PotionForm extends Item {
                 Beyonder.setBeyonderStatusActive();
                 sequences.getAbilityList().forEach(Beyonder::addAbility);
                 Beyonder.setSelectedAbility(sequences.getAbilityList().get(0));
-                player.displayClientMessage(Component.literal("You successfully became a sequence 9 Beyonder of the Pathway " + sequences.getPathway()), true);
+                player.displayClientMessage(Component.literal("You successfully became a sequence " + sequences.getSequence() + " Beyonder of the Pathway " + sequences.getPathway()), true);
             } else {
                 if (!sequences.getPathway().equals(Beyonder.getPathway())) {
                     player.displayClientMessage(
                             Component.literal("You feel the Madness devouring you.\n You shouldn't have done that!"), true);
-                    Beyonder.loseSanity(new Random().nextInt(0, 6));
+                    Beyonder.loseSanity(new Random().nextInt(0, 16));
                     return super.use(level, player, interactionHand);
                 } else {
                     if (sequences.getSequence() < Beyonder.getSequence()) {
@@ -55,6 +55,9 @@ public class PotionForm extends Item {
                                                 "But you have changed..."), true);
                                 Beyonder.loseSanity(Beyonder.getSanity() - new Random().nextInt(3, 10) * Math.abs(Beyonder.getSequence() - sequences.getSequence()));
                                 Beyonder.setSequence(sequences.getSequence());
+                            } else {
+                                player.displayClientMessage(Component.literal("You mere mortal really thought that skipping sequences would end well..."), true);
+                                Beyonder.loseSanity(Beyonder.getSanity() - new Random().nextInt(13, 23) * Math.abs(Beyonder.getSequence() - sequences.getSequence()));
                             }
                         }
                     }

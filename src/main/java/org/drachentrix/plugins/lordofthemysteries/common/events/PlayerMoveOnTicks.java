@@ -21,13 +21,13 @@ public class PlayerMoveOnTicks {
             tickCounter++;
 
             // Check every 1 seconds (20 ticks per second in Minecraft)
-            if (tickCounter >= 1 * 20) {
+            if (tickCounter >= 20) {
                 tickCounter = 0;
-
                 checkPlayerMove(Minecraft.getInstance().player);
             }
         }
     }
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         //das ist possible, aber maybe schauen, wo das lowest level ist um das umzustellen und dann preventen
@@ -45,9 +45,7 @@ public class PlayerMoveOnTicks {
 
     public void checkPlayerMove(Player player) {
         if (ClientEvents.playerPosition != null) {
-
             Level world = Minecraft.getInstance().getSingleplayerServer().getLevel(Level.OVERWORLD);
-
             IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
             if (server != null) {
                 Level spiritWorld = Minecraft.getInstance().getSingleplayerServer().getLevel(SpiritWorld.SPIRIT_WORLD_LEVEL_KEY);
@@ -58,7 +56,7 @@ public class PlayerMoveOnTicks {
                     if (xDiff > 1 || zDiff > 1 || yDiff > 1) {
                         for (int x = -xDiff - 19; x < xDiff + 19; x++) {
                             for (int z = -zDiff - 19; z < zDiff + 19; z++) {
-                                    for (int y = -yDiff - 5; y < yDiff + 8; y++) {
+                                for (int y = -yDiff - 5; y < yDiff + 8; y++) {
                                     BlockPos realPos = new BlockPos((ClientEvents.playerPosition.getX() + x), ClientEvents.playerPosition.getY() + y, (ClientEvents.playerPosition.getZ() + z));
                                     BlockState state = world.getBlockState(realPos);
                                     spiritWorld.setBlock(realPos, state, 2);

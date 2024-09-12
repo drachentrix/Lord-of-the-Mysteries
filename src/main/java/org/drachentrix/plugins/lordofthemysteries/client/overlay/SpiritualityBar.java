@@ -26,6 +26,7 @@ public class SpiritualityBar {
     public void onRenderGui(RenderGuiOverlayEvent.Post event){
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
+
         if (player == null || !Beyonder.isBeyonder()){
             return;
         }
@@ -52,13 +53,6 @@ public class SpiritualityBar {
 
         RenderSystem.setShaderTexture(0, FullBar);
         graphics.blit(FullBar, barX, barY, 0, 0 , filledWidth, BAR_HEIGHT);
-        /*
-        int filledWidth = (int) (BAR_WIDTH * filled);
-
-        graphics.blit(FullBar, BAR_X, BAR_Y, 0, 0, BAR_WIDTH, BAR_HEIGHT);
-        graphics.blit(FullBar, BAR_X, BAR_Y, 0, 0, filledWidth, BAR_HEIGHT);
-
-         */
     }
 
     private void renderSpiritualityText(GuiGraphics graphics){

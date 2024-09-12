@@ -67,7 +67,6 @@ public class ClientEvents {
             }
 
             if (KeyBinding.ABILITY_USE_KEY.isDown()) {
-
                 KeyBinding.ABILITY_USE_KEY.consumeClick();
 
                 if (Beyonder.isEnoughForAbility(Beyonder.getSelectedAbility().getSpiritualityUse())) {
@@ -76,13 +75,9 @@ public class ClientEvents {
                     }
                 } else {
                     minecraft.player.displayClientMessage(Component.literal("You seem to have emptied you spirituality. Your madness rises "), true);
-                    Beyonder.loseSanity(50);
+                    Beyonder.loseSanity(20);
                 }
-
-                //minecraft.player.displayClientMessage(Component.literal(Beyonder.getSelectedAbility().toString()), true);
-
             } else if (KeyBinding.ABILITY_CICLE_KEY.isDown()) {
-
                 KeyBinding.ABILITY_CICLE_KEY.consumeClick();
                 int nextAbilityIndex = Beyonder.getAbilityList().indexOf(Beyonder.getSelectedAbility()) + 1;
                 Beyonder.setSelectedAbility(Beyonder.getAbilityList().get(nextAbilityIndex < Beyonder.getAbilityList().size() ? nextAbilityIndex : 0));
@@ -110,9 +105,7 @@ public class ClientEvents {
 
             if (spiritWorld != null) {
                 BlockPos playerPos = player.blockPosition();
-
                 int radius = 20; // Radius to copy blocks around the player
-
                 for (int x = -radius; x <= radius; x++) {
                     for (int z = -radius; z <= radius; z++) {
                         for (int y = playerPos.getY() - 5; y <= playerPos.getY() + 5; y++) {

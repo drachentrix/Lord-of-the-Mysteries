@@ -35,9 +35,8 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
 
     private final CauldronCauldronLogImpl logger;
     private final Block[] heatingBlocks = {Blocks.FIRE, Blocks.MAGMA_BLOCK, Blocks.LAVA};
-
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 2);
+    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 2);
 
     public CraftingCauldronBlock(Properties properties) {
         super(properties);
@@ -62,6 +61,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    @NotNull
     public BlockState mirror(BlockState blockState, Mirror mirror) {
         return blockState.rotate(mirror.getRotation(blockState.getValue(FACING)));
     }
@@ -150,6 +150,7 @@ public class CraftingCauldronBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }
