@@ -7,14 +7,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.drachentrix.plugins.lordofthemysteries.client.Beyonder;
+import org.drachentrix.plugins.lordofthemysteries.common.items.custom.potion.Utils;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Ability;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.AbilityRegistry;
 import org.drachentrix.plugins.lordofthemysteries.common.utils.Scheduler;
-
-import java.util.List;
 
 public class FreezeTarget extends Ability {
     private static boolean isFreezed = false;
